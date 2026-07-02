@@ -3,6 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from api.routes import router as api_router
 from services.mock_loader import load_mock_data
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI(title="Config Archaeology API")
 

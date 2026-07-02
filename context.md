@@ -88,3 +88,117 @@ For this project, we are utilizing the **Free Cognee Cloud Developer plan ($35 v
   - Implemented the Vite + React frontend with a premium, glassmorphism design.
   - Built the `SearchBar` for querying config values, the `ContextGraph` for displaying historical data, and the `FeedbackPanel` for triggering Cognee's self-improvement memory loops.
   - Initialized a Git repository and committed the project scaffolding locally.
+
+- **[2026-07-02] Cognee Cloud Integration**:
+  - Configured `python-dotenv` in the backend to load `.env` variables.
+  - Added `.env.example` and `.env` templates for `COGNEE_API_URL`, `COGNEE_API_KEY`, and `OPENAI_API_KEY` to seamlessly switch from local file storage to the Cognee Cloud managed platform.
+
+- **[2026-07-02] Alternative LLM Integration (Groq & OpenRouter)**:
+  - Updated the `.env.example` configurations to show how to use alternate LLM providers like Groq or OpenRouter instead of OpenAI.
+  - Cognee uses `litellm` under the hood, allowing users to configure `LLM_PROVIDER`, `LLM_MODEL`, and `LLM_API_KEY` to connect to almost any open-source or commercial model.
+  - Fixed `.env` to use correct Groq env variable names (`LLM_PROVIDER`, `LLM_API_KEY`, `LLM_MODEL`).
+  - Updated model from deprecated `llama3-8b-8192` to Groq's recommended **GPT OSS 20B** (`groq/gpt-oss-20b`).
+
+- **[2026-07-02] Mid-Hackathon Discord Check-in**:
+  - Shared project progress on WeMakeDevs Discord for the Jul 02 mid-hackathon check-in (8:30 PM IST).
+  - Message shared: building Config Archaeology, FastAPI + Cognee Cloud + Groq + React, self-improvement loop with danger scores on config keys.
+
+---
+
+## 8. Complete Implementation Roadmap (Start to Finish)
+
+This is the full plan — what is done, what is in progress, and what still needs to be built.
+
+### ✅ Phase 1 — Foundation (DONE)
+- [x] Backend scaffolded: `main.py`, `api/routes.py`, `services/mock_loader.py`
+- [x] FastAPI endpoints: `/api/ingest`, `/api/query`, `/api/feedback`, `/api/forget`
+- [x] Cognee `remember()` / `recall()` / `improve()` / `forget()` wired to endpoints
+- [x] Mock data loader: seeds graph with sample Slack threads, PRs, and incident reports on startup
+- [x] Frontend scaffolded: Vite + React with Vanilla CSS glassmorphism dark UI
+- [x] Components: `SearchBar`, `ContextGraph`, `FeedbackPanel`
+- [x] Git repo initialized, `.gitignore` configured, pushed to GitHub
+- [x] Cognee Cloud connected via `.env` (`COGNEE_API_URL` + `COGNEE_API_KEY`)
+- [x] Groq API configured as LLM provider (`gpt-oss-20b`)
+
+---
+
+### 🔧 Phase 2 — Real Data Ingestion (NEXT)
+Make the tool actually useful on a real codebase, not just mock data.
+
+- [ ] **Git Ingestion Service** (`services/git_ingester.py`):
+  - Parse `git log --follow -p -- <config_file>` to extract commit messages, authors, and dates for every change to config files.
+  - Format each commit as a text chunk and call `cognee.remember()` with `dataset_name="git_history"`.
+
+- [ ] **GitHub PR Ingestion** (`services/pr_ingester.py`):
+  - Use GitHub REST API (`/repos/{owner}/{repo}/pulls`) to fetch PR titles, descriptions, and file diffs.
+  - Filter PRs that touched config files and ingest their descriptions.
+
+- [ ] **Slack Export Ingestion** (`services/slack_ingester.py`):
+  - Accept a Slack export JSON (from Slack's export tool).
+  - Parse channel messages and thread replies, filter by keywords (config key names).
+  - Ingest relevant threads into Cognee.
+
+- [ ] **Incident Report Ingestion** (`services/incident_ingester.py`):
+  - Accept markdown or text incident reports.
+  - Ingest with `dataset_name="incidents"`.
+
+- [ ] **Upload Endpoint** (`POST /api/upload`):
+  - Accept file uploads from the UI (git log exports, Slack JSON, incident markdown).
+  - Route to the right ingestion service.
+
+---
+
+### 🧠 Phase 3 — Self-Improving Danger Score (CORE FEATURE)
+This is the centrepiece of the "Self-Improving Agents" category.
+
+- [ ] **Danger Score Model** (`services/danger_score.py`):
+  - Track per-config-key metadata: number of incidents, number of safe deploys, last changed date.
+  - Store this in a lightweight SQLite table alongside Cognee's graph.
+
+- [ ] **Improve Loop**:
+  - When feedback is submitted via `POST /api/feedback`:
+    - If `correct=False` (incident): increment incident counter → call `cognee.improve()` with negative feedback → bump danger score.
+    - If `correct=True` (safe): increment safe counter → call `cognee.improve()` with positive feedback → soften danger score.
+
+- [ ] **Danger Score in Recall Response**:
+  - When `GET /api/query` is called, append the danger score and a human-readable warning level (`SAFE`, `CAUTION`, `DANGER`) to the response.
+  - Frontend renders the score as a color-coded badge (green/yellow/red).
+
+---
+
+### 🎨 Phase 4 — Frontend Polish
+Make the UI ready for the demo video.
+
+- [ ] **Danger Badge Component**: Color-coded indicator (green = safe, yellow = caution, red = danger) displayed next to the config key name.
+- [ ] **Timeline View**: Display the recalled context as a vertical timeline (oldest → newest) instead of a flat list. Show commit → PR → Slack thread → Incident as connected events.
+- [ ] **Upload UI**: Drag-and-drop panel to upload git log exports, Slack JSON, and incident markdown files to trigger ingestion.
+- [ ] **Ingestion Status Panel**: Show real-time ingestion progress (polling `/api/status`).
+- [ ] **Toast Notifications**: Show success/error toasts for feedback submissions and ingestion completions.
+- [ ] **Config File Scanner**: Let users paste their `.env` file and auto-extract all keys to show in a dashboard grid.
+
+---
+
+### 🚀 Phase 5 — Demo Prep & Submission
+Everything needed to win on Presentation Quality.
+
+- [ ] **README.md**: Write a compelling README with the problem, solution, architecture diagram, setup instructions, and demo GIF.
+- [ ] **Demo Video**: Record a 2–3 min walkthrough:
+  1. Show a mystery config value in a codebase.
+  2. Run Config Archaeology → instantly get the context.
+  3. Simulate a bad deploy → submit "caused incident" feedback.
+  4. Re-query → show the danger score increased.
+- [ ] **Architecture Diagram**: Create a visual flow: Data Sources → Ingestion → Cognee ECL → Graph/Vector Store → FastAPI → React UI → Feedback → `improve()`.
+- [ ] **Submission Form**: Fill in the WeMakeDevs submission form before July 5 end of day.
+- [ ] **Social Post**: Tweet/post tagging `@wemakedevs` and `@cognee` for the social buzz side track (top 10 posts get swag).
+- [ ] **Blog Post** (optional): Write about the build for the Keychron side track prize.
+
+---
+
+### 📅 Remaining Timeline
+| Day | Goal |
+|-----|------|
+| Jul 3 (Today) | Complete Phase 2 — real git + Slack ingestion |
+| Jul 4 | Complete Phase 3 — danger score system |
+| Jul 4 | Complete Phase 4 — frontend polish |
+| Jul 5 AM | Phase 5 — README, demo video, submission |
+| Jul 5 EOD | Submit before deadline ✅ |
