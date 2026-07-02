@@ -59,3 +59,32 @@ Located in `/frontend`.
    npm run dev
    ```
    Navigate to the local Vite URL (usually `http://localhost:5173/`) to use the application.
+
+## 5. Hackathon Judging Criteria
+The project will be evaluated based on 6 dimensions:
+1. **Potential Impact**: Does it address a meaningful problem or unlock a valuable use case with persistent AI memory?
+2. **Creativity & Innovation**: How unique is the idea? Does it push what's possible when an agent never forgets?
+3. **Technical Excellence**: How well implemented? Strong engineering practices and clean, maintainable code?
+4. **Best Use of Cognee**: How deeply does the project use Cognee's memory lifecycle APIs and hybrid graph-vector memory layer?
+5. **User Experience**: Is it intuitive? Would users actually adopt it?
+6. **Presentation Quality**: Demo, README, submission — do they clearly communicate the problem, solution, and impact?
+
+## 6. Cognee Cloud Infrastructure & Billing
+For this project, we are utilizing the **Free Cognee Cloud Developer plan ($35 value)** (claimed with code `COGNEE-35`).
+- **Available Credits**: $37.50
+- **Pricing**: $2.50 per 1,000,000 tokens; $5/month per workspace.
+- **Included in Plan**:
+  - 1,000,000 tokens
+  - Unlimited users
+  - Unlimited API calls
+  - Agentic integrations (Claude Code, Codex, MCP)
+  - Data source integrations (Slack, Notion, Google Drive)
+
+## 7. Features Log & Updates
+*(This section will be updated with all features we work on from now on.)*
+
+- **[2026-07-02] Project Scaffolding & Initial Implementation**:
+  - Implemented the FastAPI backend integrating Cognee's `remember()`, `recall()`, and `improve()` functions.
+  - Implemented the Vite + React frontend with a premium, glassmorphism design.
+  - Built the `SearchBar` for querying config values, the `ContextGraph` for displaying historical data, and the `FeedbackPanel` for triggering Cognee's self-improvement memory loops.
+  - Initialized a Git repository and committed the project scaffolding locally.
