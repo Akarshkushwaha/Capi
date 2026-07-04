@@ -1,0 +1,10 @@
+cognee
+fastapi
+uvicorn
+typer
+rich
+gitpython
+PyGithub
+python-dotenv
+requests
+pydantic

@@ -1,15 +1,27 @@
-# Python
+# Python & Cognee
+venv
+venv/
 backend/venv/
 __pycache__/
 *.pyc
 .env
+.cognee_data/
+*.db
 backend/.pytest_cache/
+*.log
 
-# Node
+# Node & Next.js
+node_modules
+node_modules/
+dashboard/node_modules/
+dashboard/.next
+dashboard/.next/
+dashboard/out/
+dashboard/build/
 frontend/node_modules/
 frontend/dist/
 frontend/dist-ssr/
-frontend/*.local
+*.local
 
 # OS
 .DS_Store

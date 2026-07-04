@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 # Capi (Config Archaeology) CLI Wrapper
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BACKEND_DIR="$SCRIPT_DIR/backend"
-VENV_PYTHON="$BACKEND_DIR/venv/bin/python"
+
+VENV_PYTHON="$SCRIPT_DIR/venv/bin/python"
+if [ ! -f "$VENV_PYTHON" ]; then
+    VENV_PYTHON="$SCRIPT_DIR/backend/venv/bin/python"
+fi
 
 if [ ! -f "$VENV_PYTHON" ]; then
-    echo "❌ Virtual environment not found at $BACKEND_DIR/venv. Please set up venv first."
+    echo "❌ Virtual environment not found. Please set up venv first."
     exit 1
 fi
 
-export PYTHONPATH="$BACKEND_DIR:$PYTHONPATH"
-exec "$VENV_PYTHON" "$BACKEND_DIR/cli.py" "$@"
+export PYTHONPATH="$SCRIPT_DIR:$PYTHONPATH"
+exec "$VENV_PYTHON" -m cli.commands "$@"
