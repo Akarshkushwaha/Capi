@@ -1,97 +1,97 @@
 "use client";
 
-import React, { useState } from "react";
-import Link from "next/link";
-import GraphView from "@/components/GraphView";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Network, Terminal, Search, Zap, ShieldCheck } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { GraphView, GraphNode, GraphLink } from "@/components/GraphView";
+import { Sparkles, RefreshCw, Network } from "lucide-react";
 
-export default function GraphExplorerPage() {
-  const [service, setService] = useState<string>("payments-api");
-  const [inputVal, setInputVal] = useState<string>("payments-api");
+export default function GraphPage() {
+  const [nodes, setNodes] = useState<GraphNode[]>([]);
+  const [links, setLinks] = useState<GraphLink[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (inputVal.trim()) {
-      setService(inputVal.trim());
+  const sampleNodes: GraphNode[] = [
+    { id: "payments-api", label: "payments-api", group: "service", description: "Core billing microservice handling transactions." },
+    { id: "DB_POOL_SIZE", label: "DB_POOL_SIZE", group: "config", val: 10, description: "Connection pool limit. Historically caused P1 outages when set > 15." },
+    { id: "REQUEST_TIMEOUT", label: "REQUEST_TIMEOUT", group: "config", val: 8, description: "HTTP timeout duration in ms. Last modified by PR #402." },
+    { id: "CACHE_TTL", label: "CACHE_TTL", group: "config", val: 6, description: "Redis session expiry duration." },
+    { id: "INC-47", label: "INC-47: OOM Crash", group: "incident", val: 9, description: "P1 Outage: Database connections exhausted during peak sales." },
+    { id: "INC-12", label: "INC-12: Gateway Timeout", group: "incident", val: 7, description: "P2 Outage: Upstream auth gateway dropped requests." },
+    { id: "alex-dev", label: "alex-dev (Lead)", group: "author", val: 5, description: "Original author of DB_POOL_SIZE scaling logic." },
+    { id: "sarah-sre", label: "sarah-sre (On-Call)", group: "author", val: 5, description: "Filed post-mortem for INC-47 and set pre-commit guardrail." },
+    { id: "billing-service", label: "billing-service", group: "service", description: "Invoicing and recurring payment scheduler." },
+    { id: "MAX_RETRIES", label: "MAX_RETRIES", group: "config", val: 8, description: "Retry loop limit for Stripe API webhooks." },
+  ];
+
+  const sampleLinks: GraphLink[] = [
+    { source: "payments-api", target: "DB_POOL_SIZE" },
+    { source: "payments-api", target: "REQUEST_TIMEOUT" },
+    { source: "payments-api", target: "CACHE_TTL" },
+    { source: "DB_POOL_SIZE", target: "INC-47" },
+    { source: "REQUEST_TIMEOUT", target: "INC-12" },
+    { source: "alex-dev", target: "DB_POOL_SIZE" },
+    { source: "sarah-sre", target: "INC-47" },
+    { source: "sarah-sre", target: "REQUEST_TIMEOUT" },
+    { source: "billing-service", target: "MAX_RETRIES" },
+    { source: "billing-service", target: "DB_POOL_SIZE" },
+  ];
+
+  const fetchGraphData = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("http://localhost:8001/graph?service=payments-api");
+      if (!res.ok) throw new Error("Graph API offline");
+      const data = await res.json();
+      if (data.nodes && data.nodes.length > 0) {
+        setNodes(data.nodes);
+        setLinks(data.links || []);
+      } else {
+        setNodes(sampleNodes);
+        setLinks(sampleLinks);
+      }
+    } catch (err) {
+      setNodes(sampleNodes);
+      setLinks(sampleLinks);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const selectPreset = (preset: string) => {
-    setInputVal(preset);
-    setService(preset);
-  };
+  useEffect(() => {
+    fetchGraphData();
+  }, []);
 
   return (
-    <main className="min-h-screen p-4 md:p-8 space-y-6 max-w-7xl mx-auto">
-      {/* Top Cyber Navigation Bar */}
-      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-white/10">
-        <div className="flex items-center space-x-3">
-          <div className="p-2.5 rounded-lg bg-[#00f0ff]/10 border border-[#00f0ff]/40 text-[#00f0ff] neon-glow-cyan">
-            <Network className="w-6 h-6" />
+    <div className="w-full space-y-8 animate-in fade-in duration-400">
+      {/* HEADER */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-[#2a2a2a] pb-6">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <Network className="w-4 h-4 text-[#f5a623]" />
+            <span className="font-mono text-xs text-[#f5a623] uppercase tracking-wider font-semibold">
+              // COGNEE KNOWLEDGE GRAPH
+            </span>
           </div>
-          <div>
-            <div className="flex items-center space-x-2 text-xs font-mono text-[#00f0ff] uppercase tracking-widest">
-              <span>COGNEE ENGINE V1</span>
-              <span>•</span>
-              <span>FORCE-DIRECTED GRAPH</span>
-            </div>
-            <h1 className="text-2xl md:text-3xl font-black tracking-tight font-mono text-white">
-              Capi <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00f0ff] to-[#ffaa00]">Knowledge Graph</span>
-            </h1>
-          </div>
+          <h1 className="font-bebas text-5xl md:text-[56px] text-[#f5a623] tracking-wide leading-none">
+            EVIDENCE BOARD
+          </h1>
+          <p className="font-sans text-base text-[#9ca3af] mt-1 max-w-2xl">
+            Every connection Capi has discovered. Config keys, incidents, engineers — all linked by red strings of provenance.
+          </p>
         </div>
 
-        <div className="flex items-center space-x-3">
-          <Link href="/">
-            <Button variant="outline" className="border-[#00f0ff]/40 text-[#00f0ff] hover:bg-[#00f0ff]/10 font-mono text-xs uppercase tracking-wider">
-              <ArrowLeft className="w-4 h-4 mr-2" /> Back to Mission Control
-            </Button>
-          </Link>
-        </div>
-      </header>
-
-      {/* Target Service Selector / Gamified Level Bar */}
-      <div className="glass-panel p-4 rounded-xl border-[#00f0ff]/30 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center space-x-3">
-          <Terminal className="w-5 h-5 text-[#00f0ff] shrink-0" />
-          <span className="text-xs font-mono text-slate-300 uppercase tracking-wider">
-            Target Microservice Graph:
-          </span>
-          <div className="flex flex-wrap gap-2">
-            {["payments-api", "billing-service", "auth-gateway"].map((preset) => (
-              <button
-                key={preset}
-                onClick={() => selectPreset(preset)}
-                className={`px-3 py-1 rounded text-xs font-mono transition-all uppercase border ${
-                  service === preset 
-                    ? "bg-[#00f0ff]/20 text-[#00f0ff] border-[#00f0ff] neon-glow-cyan font-bold" 
-                    : "bg-black/40 text-slate-400 border-white/10 hover:border-white/30"
-                }`}
-              >
-                ⚡ {preset}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <form onSubmit={handleSearch} className="flex items-center space-x-2">
-          <Input 
-            value={inputVal}
-            onChange={(e) => setInputVal(e.target.value)}
-            placeholder="Custom microservice..."
-            className="w-48 bg-black/60 border-white/20 text-white font-mono text-xs focus:border-[#00f0ff]"
-          />
-          <Button type="submit" size="sm" className="bg-[#00f0ff] hover:bg-[#00f0ff]/80 text-black font-mono text-xs font-bold uppercase tracking-wider">
-            <Search className="w-3.5 h-3.5 mr-1" /> Load
-          </Button>
-        </form>
+        <button
+          type="button"
+          onClick={fetchGraphData}
+          disabled={loading}
+          className="self-start md:self-center px-5 py-2.5 bg-[#111111] hover:bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#f5a623] rounded-lg font-mono text-xs text-[#f5f5f0] flex items-center gap-2 transition-all shadow-sm"
+        >
+          <RefreshCw className={`w-3.5 h-3.5 text-[#f5a623] ${loading ? "animate-spin" : ""}`} />
+          <span>REFRESH CORKBOARD</span>
+        </button>
       </div>
 
-      {/* Main Force Graph Explorer */}
-      <GraphView serviceName={service} />
-    </main>
+      {/* GRAPH CONTAINER */}
+      <GraphView nodes={nodes} links={links} />
+    </div>
   );
 }

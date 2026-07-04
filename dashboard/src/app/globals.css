@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -7,88 +9,46 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
+  --font-sans: var(--font-dm);
+  --font-mono: var(--font-mono);
+  --font-heading: var(--font-bebas);
   --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
 }
 
-:root {
-  --background: #07070a;
-  --foreground: #f0f4f8;
-  --card: #0e0e14;
-  --card-foreground: #f0f4f8;
-  --popover: #0e0e14;
-  --popover-foreground: #f0f4f8;
-  --primary: #00f0ff;
-  --primary-foreground: #07070a;
-  --secondary: #161622;
-  --secondary-foreground: #00f0ff;
-  --muted: #161622;
-  --muted-foreground: #8a99ad;
-  --accent: #ff003c;
-  --accent-foreground: #ffffff;
-  --destructive: #ff003c;
-  --border: rgba(0, 240, 255, 0.15);
-  --input: rgba(0, 240, 255, 0.15);
-  --ring: #00f0ff;
+:root, .dark {
+  --font-bebas: 'Bebas Neue', cursive;
+  --font-dm: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Vegas Crime Scene Detective Palette */
+  --background: #0a0a0a;
+  --foreground: #f5f5f0;
+  --card: #111111;
+  --card-foreground: #f5f5f0;
+  --popover: #1a1a1a;
+  --popover-foreground: #f5f5f0;
+  --primary: #f5a623;
+  --primary-foreground: #0a0a0a;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #f5a623;
+  --muted: #1a1a1a;
+  --muted-foreground: #9ca3af;
+  --accent: #f5a623;
+  --accent-foreground: #0a0a0a;
+  --destructive: #dc2626;
+  --border: #2a2a2a;
+  --input: #2a2a2a;
+  --ring: #f5a623;
   --radius: 0.75rem;
-}
-
-.dark {
-  --background: #07070a;
-  --foreground: #f0f4f8;
-  --card: #0e0e14;
-  --card-foreground: #f0f4f8;
-  --popover: #0e0e14;
-  --popover-foreground: #f0f4f8;
-  --primary: #00f0ff;
-  --primary-foreground: #07070a;
-  --secondary: #161622;
-  --secondary-foreground: #00f0ff;
-  --muted: #161622;
-  --muted-foreground: #8a99ad;
-  --accent: #ff003c;
-  --accent-foreground: #ffffff;
-  --destructive: #ff003c;
-  --border: rgba(0, 240, 255, 0.15);
-  --input: rgba(0, 240, 255, 0.15);
-  --ring: #00f0ff;
 }
 
 @layer base {
@@ -96,46 +56,80 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground antialiased selection:bg-[#00f0ff]/30 selection:text-[#00f0ff];
-    background-image: 
-      radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.08) 0%, transparent 60%),
-      linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
-    background-size: 100% 100%, 40px 40px, 40px 40px;
-    background-position: center top;
+    @apply bg-[#0a0a0a] text-[#f5f5f0] antialiased selection:bg-[#f5a623]/30 selection:text-[#f5a623];
+    font-family: var(--font-dm);
+    /* Ambient amber/red glow in top-left and bottom-right + subtle grain texture */
+    background: 
+      radial-gradient(ellipse at top left, rgba(245, 166, 35, 0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at bottom right, rgba(220, 38, 38, 0.05) 0%, transparent 50%),
+      #0a0a0a;
+    background-attachment: fixed;
+  }
+  h1, h2, h3, .font-bebas {
+    font-family: var(--font-bebas);
+    letter-spacing: 0.04em;
+  }
+  .font-mono {
+    font-family: var(--font-mono);
   }
 }
 
-/* Custom Cyberpunk & Gaming Aesthetics */
-.neon-glow-cyan {
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3), inset 0 0 15px rgba(0, 240, 255, 0.1);
-}
-
-.neon-glow-crimson {
-  box-shadow: 0 0 20px rgba(255, 0, 60, 0.4), inset 0 0 15px rgba(255, 0, 60, 0.15);
-}
-
+/* Custom Vegas Detective & Crime Scene Aesthetics */
 .neon-glow-amber {
-  box-shadow: 0 0 15px rgba(255, 170, 0, 0.3), inset 0 0 10px rgba(255, 170, 0, 0.1);
+  text-shadow: 
+    0 0 10px rgba(245, 166, 35, 0.8),
+    0 0 20px rgba(245, 166, 35, 0.4),
+    0 0 40px rgba(245, 166, 35, 0.2);
 }
 
-.glass-panel {
-  background: rgba(14, 14, 20, 0.75);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 240, 255, 0.2);
+.box-glow-amber {
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.15);
 }
 
-.cyber-badge {
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 700;
+@keyframes pulse-red {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.5); }
+  50% { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); }
 }
 
-@keyframes pulse-fast {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(1.03); }
+.animate-pulse-red {
+  animation: pulse-red 2s infinite;
 }
 
-.animate-pulse-fast {
-  animation: pulse-fast 1.5s infinite ease-in-out;
+@keyframes neon-flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    opacity: 1;
+    text-shadow: 
+      0 0 10px rgba(245, 166, 35, 0.8),
+      0 0 20px rgba(245, 166, 35, 0.4),
+      0 0 40px rgba(245, 166, 35, 0.2);
+  }
+  20%, 24%, 55% {
+    opacity: 0.6;
+    text-shadow: none;
+  }
+}
+
+.animate-neon-flicker {
+  animation: neon-flicker 8s infinite;
+}
+
+.crime-tape-stripe {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(220, 38, 38, 0.15),
+    rgba(220, 38, 38, 0.15) 10px,
+    rgba(0, 0, 0, 0.4) 10px,
+    rgba(0, 0, 0, 0.4) 20px
+  );
+}
+
+.cork-texture {
+  background-color: #1a1a1a;
+  background-image: radial-gradient(rgba(245, 166, 35, 0.05) 1px, transparent 0);
+  background-size: 24px 24px;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+}
+
+.evidence-border {
+  border-left: 2px solid #f5a623;
 }
