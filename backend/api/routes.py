@@ -187,11 +187,13 @@ async def query_config(key: str):
         ]
     else:
         try:
-            local_chunks = extract_git_config_history("/home/akarsh/Capi", max_commits=20)
+            # Dynamically resolve directory to look at current active workspace
+            workspace_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            local_chunks = extract_git_config_history(workspace_dir, max_commits=20)
             matching_chunks = [c for c in local_chunks if key.lower() in c.lower() or "config" in c.lower() or "env" in c.lower()]
             if matching_chunks:
                 recall_texts = [
-                    f"🔍 Real-World Git Archaeology Report for '{key}' (Repository: /home/akarsh/Capi): Found {len(matching_chunks)} historical commit modifications.",
+                    f"🔍 Real-World Git Archaeology Report for '{key}' (Repository: {workspace_dir}): Found {len(matching_chunks)} historical commit modifications.",
                     *matching_chunks[:3]
                 ]
         except Exception:
@@ -203,8 +205,10 @@ async def query_config(key: str):
             results = await asyncio.wait_for(cognee.recall(f"Explain why {key} is set"), timeout=2.0)
             recall_texts = [getattr(r, "text", str(r)) for r in results]
         except Exception:
+            # Dynamically resolve workspace dir in fallback message as well
+            workspace_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
             recall_texts = [
-                f"ℹ️ Config Archaeology Note: Checked local Git repository '/home/akarsh/Capi'. No direct historical outage records found for '{key}'. It appears to be operating safely within default boundaries."
+                f"ℹ️ Config Archaeology Note: Checked local Git repository '{workspace_dir}'. No direct historical outage records found for '{key}'. It appears to be operating safely within default boundaries."
             ]
 
     # 3. Build dynamic ECL graph from real recall data & git commits

@@ -116,4 +116,5 @@ async def ingest_repo_git_history(repo_path: str = ".", max_commits: int = 20, d
     return len(chunks)
 
 if __name__ == "__main__":
-    asyncio.run(ingest_repo_git_history("/home/akarsh/Capi", max_commits=10))
+    current_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    asyncio.run(ingest_repo_git_history(current_root, max_commits=10))
