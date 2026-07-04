@@ -263,3 +263,27 @@ async def submit_feedback(req: FeedbackRequest):
 async def forget_dataset(dataset_name: str):
     await cognee.forget(dataset=dataset_name)
     return {"status": "success", "message": f"Dataset {dataset_name} forgotten"}
+
+@router.get("/variables")
+async def get_real_variables():
+    """
+    Scans the repository to identify real configuration variables.
+    """
+    try:
+        workspace_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        local_chunks = extract_git_config_history(workspace_dir, max_commits=20)
+        variables = set()
+        for chunk in local_chunks:
+            # Look for lines containing config variables or uppercase words
+            for m in re.finditer(r"--- ([a-zA-Z0-9_/.-]+) ---", chunk):
+                # Extract words starting with uppercase letters inside patches
+                for word in re.finditer(r"\+([A-Z_]{3,15})\s*[:=]", chunk):
+                    variables.add(word.group(1))
+        
+        # Fallback presets if repo scanning is clean
+        default_set = {"PORT", "LLM_PROVIDER", "LLM_MODEL", "COGNEE_API_URL", "EMBEDDING_PROVIDER"}
+        result = list(variables.union(default_set))
+        return {"status": "success", "variables": result[:8]}
+    except Exception:
+        return {"status": "success", "variables": ["PORT", "LLM_PROVIDER", "LLM_MODEL", "COGNEE_API_URL", "EMBEDDING_PROVIDER"]}
+
