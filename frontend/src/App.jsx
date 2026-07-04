@@ -75,30 +75,30 @@ function App() {
             onClick={handleSeedDemo} 
             disabled={demoStatus === 'seeding'}
             style={{
-              background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-              color: '#fff',
+              background: 'linear-gradient(135deg, #d4af37 0%, #aa841c 100%)',
+              color: '#070708',
               border: 'none',
-              padding: '0.6rem 1.2rem',
+              padding: '0.6rem 1.4rem',
               borderRadius: '50px',
-              fontWeight: 600,
+              fontWeight: 700,
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               gap: '0.5rem',
-              boxShadow: '0 0 15px rgba(59, 130, 246, 0.4)',
+              boxShadow: '0 0 20px rgba(212, 175, 55, 0.4)',
               transition: 'all 0.3s ease'
             }}
           >
-            <Zap size={16} /> {demoStatus === 'seeding' ? 'Seeding Knowledge Graph...' : '⚡ One-Click E-Commerce Outage Demo'}
+            <Zap size={16} fill="#070708" /> {demoStatus === 'seeding' ? 'Rolling the Dice...' : '🎰 One-Click E-Commerce Outage Demo'}
           </button>
 
           <button 
             onClick={() => setShowIngestHub(!showIngestHub)}
             style={{
-              background: showIngestHub ? 'rgba(168, 85, 247, 0.3)' : 'rgba(168, 85, 247, 0.1)',
-              border: '1px solid #a855f7',
+              background: showIngestHub ? 'rgba(212, 175, 55, 0.2)' : 'rgba(212, 175, 55, 0.05)',
+              border: '1px solid #d4af37',
               color: '#fff',
-              padding: '0.6rem 1.2rem',
+              padding: '0.6rem 1.4rem',
               borderRadius: '50px',
               fontWeight: 600,
               cursor: 'pointer',
@@ -108,7 +108,7 @@ function App() {
               transition: 'all 0.3s ease'
             }}
           >
-            <UploadCloud size={16} color="#a855f7" />
+            <UploadCloud size={16} color="#d4af37" />
             📥 Connect Real Codebase & Logs
             {showIngestHub ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           </button>

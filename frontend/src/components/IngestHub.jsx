@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FolderGit2, GitPullRequest, AlertOctagon, CheckCircle2, Loader2, UploadCloud } from 'lucide-react';
+import { FolderGit2, GitPullRequest, AlertOctagon, CheckCircle2, Loader2, UploadCloud, HelpCircle } from 'lucide-react';
 
 export default function IngestHub({ onIngestSuccess }) {
   const [activeTab, setActiveTab] = useState('git');
@@ -42,7 +42,7 @@ export default function IngestHub({ onIngestSuccess }) {
         setStatus({ loading: false, msg: data.message || 'GitHub PR discussions ingested into Cognee graph!', error: '' });
         if (onIngestSuccess) onIngestSuccess();
       } else {
-        setStatus({ loading: false, msg: '', error: 'Failed to fetch PRs.' });
+        setStatus({ loading: false, msg: 'Failed to fetch PRs.' });
       }
     } catch (err) {
       setStatus({ loading: false, msg: '', error: 'Could not connect to backend.' });
@@ -72,7 +72,7 @@ export default function IngestHub({ onIngestSuccess }) {
   return (
     <div className="glass-panel" style={{
       marginBottom: '2rem',
-      background: 'rgba(20, 20, 30, 0.6)',
+      background: 'rgba(20, 20, 30, 0.65)',
       border: '1px solid rgba(139, 92, 246, 0.3)',
       boxShadow: '0 8px 32px rgba(139, 92, 246, 0.1)'
     }}>
@@ -85,7 +85,7 @@ export default function IngestHub({ onIngestSuccess }) {
       </p>
 
       {/* Tab Selectors */}
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.2rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '0.8rem', flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '0.8rem', flexWrap: 'wrap' }}>
         <button
           onClick={() => { setActiveTab('git'); setStatus({ loading: false, msg: '', error: '' }); }}
           style={{
@@ -144,141 +144,170 @@ export default function IngestHub({ onIngestSuccess }) {
 
       {/* Tab Contents */}
       {activeTab === 'git' && (
-        <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap', alignItems: 'center' }}>
-          <div style={{ flex: 1, minWidth: '260px' }}>
-            <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.3rem' }}>
-              Absolute Path to Local Repository:
-            </label>
-            <input
-              type="text"
-              value={gitPath}
-              onChange={(e) => setGitPath(e.target.value)}
-              placeholder="/home/user/my-project"
-              style={{
-                width: '100%',
-                padding: '0.7rem 1rem',
-                background: 'rgba(0,0,0,0.4)',
-                border: '1px solid rgba(255,255,255,0.15)',
-                borderRadius: '8px',
-                color: '#fff',
-                fontSize: '0.9rem',
-                outline: 'none'
-              }}
-            />
+        <div>
+          <div style={{ display: 'flex', gap: '1rem', background: 'rgba(59, 130, 246, 0.05)', border: '1px solid rgba(59, 130, 246, 0.15)', padding: '0.8rem 1rem', borderRadius: '8px', marginBottom: '1.2rem', fontSize: '0.85rem', color: '#c084fc', alignItems: 'flex-start' }}>
+            <HelpCircle size={18} style={{ flexShrink: 0, marginTop: '2px' }} />
+            <div>
+              <strong>How it works:</strong> Ingests the commit logs of your local repository. Capi automatically scans the commit history (e.g. up to 20 commits), extracts configuration file edits (`.env`, `.yaml`, `.json`), parses file additions/removals, and links them into the Cognee relational database.
+            </div>
           </div>
-          <button
-            onClick={handleIngestGit}
-            disabled={status.loading}
-            style={{
-              background: 'linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)',
-              color: '#fff',
-              border: 'none',
-              padding: '0.75rem 1.4rem',
-              borderRadius: '8px',
-              fontWeight: 600,
-              cursor: status.loading ? 'not-allowed' : 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              marginTop: '1.2rem',
-              boxShadow: '0 4px 15px rgba(168, 85, 247, 0.3)'
-            }}
-          >
-            {status.loading ? <Loader2 size={18} className="spin" /> : <FolderGit2 size={18} />}
-            {status.loading ? 'Scanning & Ingesting...' : 'Scan Git Commits'}
-          </button>
+
+          <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap', alignItems: 'flex-end' }}>
+            <div style={{ flex: 1, minWidth: '280px' }}>
+              <label style={{ display: 'block', fontSize: '0.85rem', color: '#a1a1aa', marginBottom: '0.4rem', fontWeight: 500 }}>
+                Absolute Local Git Directory Path:
+              </label>
+              <input
+                type="text"
+                value={gitPath}
+                onChange={(e) => setGitPath(e.target.value)}
+                placeholder="e.g. /home/akarsh/Capi or /Users/username/my-web-app"
+                style={{
+                  width: '100%',
+                  padding: '0.8rem 1rem',
+                  background: 'rgba(0,0,0,0.4)',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  borderRadius: '8px',
+                  color: '#fff',
+                  fontSize: '0.9rem',
+                  outline: 'none'
+                }}
+              />
+            </div>
+            <button
+              onClick={handleIngestGit}
+              disabled={status.loading}
+              style={{
+                background: 'linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)',
+                color: '#fff',
+                border: 'none',
+                padding: '0.85rem 1.6rem',
+                borderRadius: '8px',
+                fontWeight: 600,
+                cursor: status.loading ? 'not-allowed' : 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                boxShadow: '0 4px 15px rgba(168, 85, 247, 0.3)',
+                height: '46px'
+              }}
+            >
+              {status.loading ? <Loader2 size={18} className="spin" /> : <FolderGit2 size={18} />}
+              {status.loading ? 'Scanning & Ingesting...' : 'Scan Git Commits'}
+            </button>
+          </div>
         </div>
       )}
 
       {activeTab === 'pr' && (
-        <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap', alignItems: 'center' }}>
-          <div style={{ flex: 1, minWidth: '260px' }}>
-            <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.3rem' }}>
-              GitHub Repository (owner/repo):
-            </label>
-            <input
-              type="text"
-              value={githubRepo}
-              onChange={(e) => setGithubRepo(e.target.value)}
-              placeholder="fastapi/fastapi"
-              style={{
-                width: '100%',
-                padding: '0.7rem 1rem',
-                background: 'rgba(0,0,0,0.4)',
-                border: '1px solid rgba(255,255,255,0.15)',
-                borderRadius: '8px',
-                color: '#fff',
-                fontSize: '0.9rem',
-                outline: 'none'
-              }}
-            />
+        <div>
+          <div style={{ display: 'flex', gap: '1rem', background: 'rgba(59, 130, 246, 0.05)', border: '1px solid rgba(59, 130, 246, 0.15)', padding: '0.8rem 1rem', borderRadius: '8px', marginBottom: '1.2rem', fontSize: '0.85rem', color: '#c084fc', alignItems: 'flex-start' }}>
+            <HelpCircle size={18} style={{ flexShrink: 0, marginTop: '2px' }} />
+            <div>
+              <strong>How it works:</strong> Fetches open or merged Pull Requests from the GitHub API. It parses discussion descriptions, comment text, and lists of modified config files to index key conversations and team review agreements into the Cognee graph.
+            </div>
           </div>
-          <button
-            onClick={handleIngestPRs}
-            disabled={status.loading}
-            style={{
-              background: 'linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)',
-              color: '#fff',
-              border: 'none',
-              padding: '0.75rem 1.4rem',
-              borderRadius: '8px',
-              fontWeight: 600,
-              cursor: status.loading ? 'not-allowed' : 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              marginTop: '1.2rem',
-              boxShadow: '0 4px 15px rgba(168, 85, 247, 0.3)'
-            }}
-          >
-            {status.loading ? <Loader2 size={18} className="spin" /> : <GitPullRequest size={18} />}
-            {status.loading ? 'Fetching PRs...' : 'Ingest PR Discussions'}
-          </button>
+
+          <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap', alignItems: 'flex-end' }}>
+            <div style={{ flex: 1, minWidth: '280px' }}>
+              <label style={{ display: 'block', fontSize: '0.85rem', color: '#a1a1aa', marginBottom: '0.4rem', fontWeight: 500 }}>
+                GitHub Repository:
+              </label>
+              <input
+                type="text"
+                value={githubRepo}
+                onChange={(e) => setGithubRepo(e.target.value)}
+                placeholder="e.g. owner/repository_name (e.g., fastapi/fastapi)"
+                style={{
+                  width: '100%',
+                  padding: '0.8rem 1rem',
+                  background: 'rgba(0,0,0,0.4)',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  borderRadius: '8px',
+                  color: '#fff',
+                  fontSize: '0.9rem',
+                  outline: 'none'
+                }}
+              />
+            </div>
+            <button
+              onClick={handleIngestPRs}
+              disabled={status.loading}
+              style={{
+                background: 'linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)',
+                color: '#fff',
+                border: 'none',
+                padding: '0.85rem 1.6rem',
+                borderRadius: '8px',
+                fontWeight: 600,
+                cursor: status.loading ? 'not-allowed' : 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                boxShadow: '0 4px 15px rgba(168, 85, 247, 0.3)',
+                height: '46px'
+              }}
+            >
+              {status.loading ? <Loader2 size={18} className="spin" /> : <GitPullRequest size={18} />}
+              {status.loading ? 'Fetching PRs...' : 'Ingest PR Discussions'}
+            </button>
+          </div>
         </div>
       )}
 
       {activeTab === 'custom' && (
         <div>
-          <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.3rem' }}>
-            Paste Post-Mortem Report, Slack Export, or Custom Architecture Decision Note:
-          </label>
-          <textarea
-            value={customLog}
-            onChange={(e) => setCustomLog(e.target.value)}
-            rows={4}
-            style={{
-              width: '100%',
-              padding: '0.7rem 1rem',
-              background: 'rgba(0,0,0,0.4)',
-              border: '1px solid rgba(255,255,255,0.15)',
-              borderRadius: '8px',
-              color: '#fff',
-              fontSize: '0.9rem',
-              outline: 'none',
-              fontFamily: 'monospace',
-              marginBottom: '0.8rem'
-            }}
-          />
-          <button
-            onClick={handleIngestCustom}
-            disabled={status.loading}
-            style={{
-              background: 'linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)',
-              color: '#fff',
-              border: 'none',
-              padding: '0.75rem 1.4rem',
-              borderRadius: '8px',
-              fontWeight: 600,
-              cursor: status.loading ? 'not-allowed' : 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              boxShadow: '0 4px 15px rgba(168, 85, 247, 0.3)'
-            }}
-          >
-            {status.loading ? <Loader2 size={18} className="spin" /> : <AlertOctagon size={18} />}
-            {status.loading ? 'Ingesting Report...' : 'Ingest Report into Graph'}
-          </button>
+          <div style={{ display: 'flex', gap: '1rem', background: 'rgba(59, 130, 246, 0.05)', border: '1px solid rgba(59, 130, 246, 0.15)', padding: '0.8rem 1rem', borderRadius: '8px', marginBottom: '1.2rem', fontSize: '0.85rem', color: '#c084fc', alignItems: 'flex-start' }}>
+            <HelpCircle size={18} style={{ flexShrink: 0, marginTop: '2px' }} />
+            <div>
+              <strong>How it works:</strong> Directly uploads outage post-mortems, system crashes, or Slack channel emergency thread exports. Capi's AI parses mentions of variables (e.g., `TIMEOUT`, `PORT`, `DB_POOL_SIZE`) and creates direct danger nodes in the SQLite feedback engine.
+            </div>
+          </div>
+
+          <div>
+            <label style={{ display: 'block', fontSize: '0.85rem', color: '#a1a1aa', marginBottom: '0.4rem', fontWeight: 500 }}>
+              Paste Incident Post-Mortem, Slack Export, or Custom Warning Note:
+            </label>
+            <textarea
+              value={customLog}
+              onChange={(e) => setCustomLog(e.target.value)}
+              rows={5}
+              placeholder="e.g. INCIDENT REPORT INC-99: DB_POOL_SIZE was set to 40. This exhausted system connections during high traffic and crashed the payment API."
+              style={{
+                width: '100%',
+                padding: '0.8rem 1rem',
+                background: 'rgba(0,0,0,0.4)',
+                border: '1px solid rgba(255,255,255,0.15)',
+                borderRadius: '8px',
+                color: '#fff',
+                fontSize: '0.9rem',
+                outline: 'none',
+                fontFamily: 'monospace',
+                marginBottom: '1rem',
+                lineHeight: '1.4'
+              }}
+            />
+            <button
+              onClick={handleIngestCustom}
+              disabled={status.loading}
+              style={{
+                background: 'linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)',
+                color: '#fff',
+                border: 'none',
+                padding: '0.85rem 1.6rem',
+                borderRadius: '8px',
+                fontWeight: 600,
+                cursor: status.loading ? 'not-allowed' : 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                boxShadow: '0 4px 15px rgba(168, 85, 247, 0.3)'
+              }}
+            >
+              {status.loading ? <Loader2 size={18} className="spin" /> : <AlertOctagon size={18} />}
+              {status.loading ? 'Ingesting Report...' : 'Ingest Report into Graph'}
+            </button>
+          </div>
         </div>
       )}
 
