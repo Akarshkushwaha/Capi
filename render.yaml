@@ -7,10 +7,6 @@ services:
     region: oregon
     plan: free
     healthCheckPath: /health
-    disk:
-      name: cognee-data
-      mountPath: /app/.cognee_data
-      sizeGB: 1
     envVars:
       - key: GROQ_API_KEY
         sync: false
@@ -20,19 +16,3 @@ services:
         value: custom
       - key: LLM_MODEL
         value: groq/llama-3.3-70b-versatile
-
-  # Capi Dashboard (Next.js)
-  - type: web
-    name: capi-dashboard
-    env: node
-    rootDir: dashboard
-    buildCommand: bun install && bun run build
-    startCommand: bun run start
-    region: oregon
-    plan: free
-    envVars:
-      - key: NEXT_PUBLIC_API_URL
-        fromService:
-          type: web
-          name: capi-backend
-          property: url
