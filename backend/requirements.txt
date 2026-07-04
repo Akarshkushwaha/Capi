@@ -3,3 +3,7 @@ uvicorn
 cognee
 pydantic
 python-dotenv
+gitpython
+typer
+rich
+requests
