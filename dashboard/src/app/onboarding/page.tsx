@@ -1,0 +1,302 @@
+"use client";
+
+import React, { useState } from "react";
+import { Sparkles, Terminal, Copy, Check, ShieldAlert, CheckCircle2, ArrowRight, Database, GitBranch, GitPullRequest, Zap, Play } from "lucide-react";
+import Link from "next/link";
+
+export default function OnboardingPage() {
+  const [copiedCmd, setCopiedCmd] = useState<string | null>(null);
+  const [simulatedCommit, setSimulatedCommit] = useState<"idle" | "running" | "blocked" | "success">("idle");
+  const [repoPath, setRepoPath] = useState("/home/akarsh/my-production-service");
+  const [serviceName, setServiceName] = useState("billing-gateway");
+  const [scanStatus, setScanStatus] = useState<"idle" | "scanning" | "done">("idle");
+
+  const copyToClipboard = (text: string, id: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedCmd(id);
+    setTimeout(() => setCopiedCmd(null), 2500);
+  };
+
+  const handleSimulateCommit = () => {
+    setSimulatedCommit("running");
+    setTimeout(() => {
+      setSimulatedCommit("blocked");
+    }, 1200);
+  };
+
+  const handleSimulateScan = (e: React.FormEvent) => {
+    e.preventDefault();
+    setScanStatus("scanning");
+    setTimeout(() => {
+      setScanStatus("done");
+    }, 1500);
+  };
+
+  return (
+    <div className="w-full space-y-12 animate-in fade-in duration-400 pb-12">
+      {/* HEADER */}
+      <div className="text-center space-y-4 pt-4 border-b border-[#2a2a2a] pb-8">
+        <div className="inline-flex items-center gap-2 bg-[#f5a623]/10 border border-[#f5a623]/40 px-3 py-1 rounded-full text-[#f5a623] font-mono text-xs uppercase tracking-widest">
+          <Sparkles className="w-3.5 h-3.5" />
+          // DETECTIVE WORKFLOW INDUCTION MANUAL
+        </div>
+        <h1 className="font-bebas text-5xl md:text-[64px] text-white tracking-wide leading-none">
+          HOW TO INTEGRATE CAPI INTO YOUR WORKFLOW
+        </h1>
+        <p className="font-sans text-lg md:text-xl text-[#9ca3af] max-w-3xl mx-auto">
+          Capi is not a passive dashboard—it is an active **autonomous configuration guardrail** that sits in your terminal, Git hooks, and CI/CD pipelines. Here is how to wire it up in 3 simple steps.
+        </p>
+      </div>
+
+      {/* MISSION 1: THE GUARDRAIL WEAPON */}
+      <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl p-6 md:p-8 shadow-xl space-y-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-2 h-full bg-[#f5a623]" />
+        
+        <div className="flex items-start justify-between gap-4 flex-wrap border-b border-[#2a2a2a] pb-4">
+          <div>
+            <span className="font-mono text-xs text-[#f5a623] uppercase tracking-wider font-bold">
+              // STEP 1 OF 3: TERMINAL & GIT HOOK INSTALLATION
+            </span>
+            <h2 className="font-bebas text-4xl text-white tracking-wide mt-1">
+              DEPLOY THE PRE-COMMIT GUARDRAIL TO YOUR REPO
+            </h2>
+          </div>
+          <span className="font-mono text-xs bg-[#1a1a1a] px-3 py-1 rounded text-[#9ca3af] border border-[#2a2a2a]">
+            TIME TO SETUP: 30 SECONDS
+          </span>
+        </div>
+
+        <p className="font-sans text-base text-[#f5f5f0] leading-relaxed">
+          Install Capi in your project root and deploy the **autonomous pre-commit hook**. Once installed, Capi automatically intercepts `git commit` commands, parses staged diffs for environment variables, and checks Cognee graph memory before allowing the commit to proceed.
+        </p>
+
+        {/* Copyable bash snippet */}
+        <div className="bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg p-4 font-mono text-sm relative group">
+          <div className="flex items-center justify-between text-[#9ca3af] text-xs mb-2 pb-2 border-b border-[#1a1a1a]">
+            <span>bash — terminal</span>
+            <button
+              type="button"
+              onClick={() => copyToClipboard(`git clone https://github.com/Akarshkushwaha/Capi.git\ncd Capi && pip install -r requirements.txt\n./capi install-hook`, "cmd1")}
+              className="flex items-center gap-1.5 text-[#f5a623] hover:text-[#fbbf24] transition-colors"
+            >
+              {copiedCmd === "cmd1" ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{copiedCmd === "cmd1" ? "COPIED!" : "COPY COMMAND"}</span>
+            </button>
+          </div>
+          <div className="space-y-1 text-[#22c55e]">
+            <p><span className="text-[#9ca3af]">$</span> git clone https://github.com/Akarshkushwaha/Capi.git</p>
+            <p><span className="text-[#9ca3af]">$</span> cd Capi && pip install -r requirements.txt</p>
+            <p><span className="text-[#9ca3af]">$</span> ./capi install-hook</p>
+            <p className="text-[#f5f5f0] pt-1 opacity-80">✓ Guardrail hook successfully deployed to .git/hooks/pre-commit</p>
+          </div>
+        </div>
+
+        {/* INTERACTIVE SIMULATOR */}
+        <div className="bg-[#1a1a1a]/60 border border-[#2a2a2a] rounded-lg p-5 space-y-4">
+          <div className="flex items-center justify-between">
+            <span className="font-mono text-xs text-[#f5a623] uppercase font-semibold flex items-center gap-2">
+              <Play className="w-3.5 h-3.5 fill-current" />
+              // INTERACTIVE TEST: SIMULATE A DANGEROUS COMMIT
+            </span>
+            <button
+              type="button"
+              onClick={handleSimulateCommit}
+              disabled={simulatedCommit === "running"}
+              className="px-4 py-1.5 bg-[#dc2626] hover:bg-[#b91c1c] text-white font-bebas text-lg tracking-wider rounded transition-all shadow-md disabled:opacity-50"
+            >
+              {simulatedCommit === "running" ? "INTERCEPTING..." : "SIMULATE: git commit -m 'bump DB_POOL_SIZE=25'"}
+            </button>
+          </div>
+
+          {simulatedCommit === "blocked" && (
+            <div className="bg-[#111111] border border-[#dc2626] rounded p-4 font-mono text-xs space-y-2 animate-in fade-in duration-300 shadow-[0_0_20px_rgba(220,38,38,0.3)]">
+              <div className="text-[#dc2626] font-bold flex items-center gap-2">
+                <ShieldAlert className="w-4 h-4 animate-bounce" />
+                ⚠️ CAPI PRE-COMMIT GUARDRAIL ALERT! COMMIT BLOCKED!
+              </div>
+              <div className="text-[#f5f5f0] pl-4 border-l-2 border-[#dc2626] space-y-1 py-1">
+                <p><span className="text-[#f5a623]">Key:</span> DB_POOL_SIZE | <span className="text-[#f5a623]">Proposed Value:</span> 25 (Current: 10)</p>
+                <p><span className="text-[#f5a623]">Danger Score:</span> <strong className="text-[#dc2626]">95/100 (HIGH RISK)</strong></p>
+                <p className="text-[#dc2626] pt-1">Historical Outage Detected: INC-47 (Production DB crashed due to connection memory exhaustion when set &gt; 15 on standard t2.micro instances).</p>
+                <p className="text-[#16a34a] font-semibold pt-1">ACTION REQUIRED: Revert DB_POOL_SIZE to safe range (5 - 15) to commit.</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* MISSION 2: INGEST YOUR REPOSITORY */}
+      <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl p-6 md:p-8 shadow-xl space-y-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-2 h-full bg-[#dc2626]" />
+        
+        <div className="flex items-start justify-between gap-4 flex-wrap border-b border-[#2a2a2a] pb-4">
+          <div>
+            <span className="font-mono text-xs text-[#dc2626] uppercase tracking-wider font-bold">
+              // STEP 2 OF 3: CODEBASE & GIT HISTORY INGESTION
+            </span>
+            <h2 className="font-bebas text-4xl text-white tracking-wide mt-1">
+              CONNECT YOUR REAL REPOSITORIES & PULL REQUESTS
+            </h2>
+          </div>
+          <span className="font-mono text-xs bg-[#1a1a1a] px-3 py-1 rounded text-[#9ca3af] border border-[#2a2a2a]">
+            POWERED BY COGNEE HYBRID VECTOR GRAPH
+          </span>
+        </div>
+
+        <p className="font-sans text-base text-[#f5f5f0] leading-relaxed">
+          Point Capi to any local microservice repository or GitHub project. Our GitPython and PyGithub engines will parse historical commit logs, extract variable declarations, and construct a causal graph linking engineers to every variable change.
+        </p>
+
+        {/* Copyable bash snippet */}
+        <div className="bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg p-4 font-mono text-sm relative group">
+          <div className="flex items-center justify-between text-[#9ca3af] text-xs mb-2 pb-2 border-b border-[#1a1a1a]">
+            <span>bash — terminal</span>
+            <button
+              type="button"
+              onClick={() => copyToClipboard(`# Ingest local Git repository commit logs\n./capi ingest /path/to/your/repo --service payments-api\n\n# Ingest GitHub Pull Request discussions & review reasoning\n./capi ingest-prs --repo org/repo --token $GITHUB_TOKEN`, "cmd2")}
+              className="flex items-center gap-1.5 text-[#f5a623] hover:text-[#fbbf24] transition-colors"
+            >
+              {copiedCmd === "cmd2" ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{copiedCmd === "cmd2" ? "COPIED!" : "COPY COMMANDS"}</span>
+            </button>
+          </div>
+          <div className="space-y-2 text-[#22c55e]">
+            <p className="text-[#9ca3af] font-mono text-xs"># 1. Scan local Git commits and .env files into Cognee graph memory:</p>
+            <p><span className="text-[#9ca3af]">$</span> ./capi ingest /home/username/my-service --service billing-api</p>
+            <p className="text-[#9ca3af] font-mono text-xs pt-2"># 2. Extract GitHub Pull Request review reasoning & architecture discussions:</p>
+            <p><span className="text-[#9ca3af]">$</span> ./capi ingest-prs --repo org/my-service --token $GITHUB_TOKEN</p>
+          </div>
+        </div>
+
+        {/* LIVE SCAN SIMULATOR */}
+        <form onSubmit={handleSimulateScan} className="bg-[#1a1a1a]/60 border border-[#2a2a2a] rounded-lg p-5 space-y-4">
+          <div className="font-mono text-xs text-[#f5a623] uppercase font-semibold flex items-center gap-2">
+            <Database className="w-3.5 h-3.5" />
+            // LIVE CODEBASE SCANNER (TEST INGESTION HUB)
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="sm:col-span-2">
+              <label className="block font-mono text-[11px] text-[#9ca3af] uppercase mb-1">LOCAL REPOSITORY PATH</label>
+              <input
+                type="text"
+                value={repoPath}
+                onChange={(e) => setRepoPath(e.target.value)}
+                className="w-full bg-[#0a0a0a] border border-[#2a2a2a] rounded p-2.5 font-mono text-sm text-[#f5a623] focus:border-[#f5a623] focus:outline-none"
+                required
+              />
+            </div>
+            <div>
+              <label className="block font-mono text-[11px] text-[#9ca3af] uppercase mb-1">SERVICE NAME</label>
+              <input
+                type="text"
+                value={serviceName}
+                onChange={(e) => setServiceName(e.target.value)}
+                className="w-full bg-[#0a0a0a] border border-[#2a2a2a] rounded p-2.5 font-mono text-sm text-[#f5a623] focus:border-[#f5a623] focus:outline-none"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between pt-2">
+            <button
+              type="submit"
+              disabled={scanStatus === "scanning"}
+              className="px-6 py-2.5 bg-[#f5a623] hover:bg-[#fbbf24] text-[#0a0a0a] font-bebas text-xl tracking-wider rounded transition-all shadow-md disabled:opacity-50 flex items-center gap-2"
+            >
+              <GitBranch className="w-4 h-4" />
+              {scanStatus === "scanning" ? "SCANNING GIT COMMITS..." : "SIMULATE REPO INGESTION"}
+            </button>
+
+            {scanStatus === "done" && (
+              <span className="font-mono text-xs text-[#16a34a] flex items-center gap-1.5 animate-in fade-in duration-300">
+                <CheckCircle2 className="w-4 h-4" />
+                ✓ 14 CONFIG KEYS INDEXED INTO COGNEE HYBRID GRAPH
+              </span>
+            )}
+          </div>
+        </form>
+      </div>
+
+      {/* MISSION 3: SELF-IMPROVING FEEDBACK LOOPS */}
+      <div className="bg-[#111111] border border-[#2a2a2a] rounded-xl p-6 md:p-8 shadow-xl space-y-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-2 h-full bg-[#16a34a]" />
+        
+        <div className="flex items-start justify-between gap-4 flex-wrap border-b border-[#2a2a2a] pb-4">
+          <div>
+            <span className="font-mono text-xs text-[#16a34a] uppercase tracking-wider font-bold">
+              // STEP 3 OF 3: SELF-IMPROVING FEEDBACK LOOPS (`cognee.improve`)
+            </span>
+            <h2 className="font-bebas text-4xl text-white tracking-wide mt-1">
+              AUTOMATE CI/CD AUDITS & SLACK OUTAGE REWARDS
+            </h2>
+          </div>
+          <span className="font-mono text-xs bg-[#1a1a1a] px-3 py-1 rounded text-[#9ca3af] border border-[#2a2a2a]">
+            CONTINUOUS LEARNING
+          </span>
+        </div>
+
+        <p className="font-sans text-base text-[#f5f5f0] leading-relaxed">
+          Capi gets smarter every time your team ships code. Integrate our feedback commands into your CI/CD deployment scripts or Slack bot incident workflows. When a deployment is clean, Capi reduces the variable&apos;s Danger Score. When an outage occurs, Capi immediately penalizes the score so no engineer repeats the mistake.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+          {/* Positive Feedback Box */}
+          <div className="bg-[#16a34a]/10 border border-[#16a34a]/40 rounded-lg p-5 space-y-3">
+            <div className="font-bebas text-2xl text-[#16a34a] flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5" />
+              POSITIVE FEEDBACK (SAFE DEPLOYMENT)
+            </div>
+            <p className="font-sans text-sm text-[#f5f5f0]/90">
+              Run after a successful Kubernetes or Docker deployment in your CI/CD script:
+            </p>
+            <div className="bg-[#0a0a0a] p-3 rounded font-mono text-xs text-[#22c55e] border border-[#16a34a]/30">
+              $ ./capi safe DB_POOL_SIZE --service payments-api
+              <div className="text-[#9ca3af] pt-1"># Result: Danger score reduced (-10) in Cognee memory.</div>
+            </div>
+          </div>
+
+          {/* Negative Feedback Box */}
+          <div className="bg-[#dc2626]/10 border border-[#dc2626]/40 rounded-lg p-5 space-y-3">
+            <div className="font-bebas text-2xl text-[#dc2626] flex items-center gap-2">
+              <ShieldAlert className="w-5 h-5" />
+              NEGATIVE FEEDBACK (INCIDENT POST-MORTEM)
+            </div>
+            <p className="font-sans text-sm text-[#f5f5f0]/90">
+              Run when a variable causes a P1/P2 outage or via Slack emergency webhook:
+            </p>
+            <div className="bg-[#0a0a0a] p-3 rounded font-mono text-xs text-[#ef4444] border border-[#dc2626]/30">
+              $ ./capi incident DB_POOL_SIZE --service payments-api --severity P1
+              <div className="text-[#9ca3af] pt-1"># Result: Danger score penalized (+20) in Cognee memory.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* FOOTER CALL TO ACTION */}
+      <div className="bg-[#14141a] border border-[#f5a623]/40 rounded-xl p-8 text-center space-y-4 shadow-[0_0_40px_rgba(245,166,35,0.15)]">
+        <h3 className="font-bebas text-4xl text-white tracking-wide">
+          READY TO BECOME A CONFIG ARCHAEOLOGY DETECTIVE?
+        </h3>
+        <p className="font-sans text-base text-[#9ca3af] max-w-xl mx-auto">
+          Start your first investigation right now on Mission Control or audit your team&apos;s staged configuration changes in seconds.
+        </p>
+        <div className="flex flex-wrap justify-center gap-4 pt-2">
+          <Link
+            href="/"
+            className="px-8 py-3 bg-[#f5a623] hover:bg-[#fbbf24] text-[#0a0a0a] font-bebas text-2xl tracking-wider rounded-lg transition-transform hover:-translate-y-0.5 shadow-lg flex items-center gap-2"
+          >
+            <span>OPEN MISSION CONTROL</span>
+            <ArrowRight className="w-5 h-5" />
+          </Link>
+          <Link
+            href="/check"
+            className="px-8 py-3 bg-[#111111] hover:bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#f5a623] text-[#f5f5f0] font-bebas text-2xl tracking-wider rounded-lg transition-colors"
+          >
+            RUN PRE-CHANGE SAFETY CHECK
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
