@@ -1,0 +1,52 @@
+# Capi Backend — Multi-stage Optimized Python Dockerfile
+FROM python:3.11-slim as builder
+
+# Prevent Python from writing pyc files and buffering stdout
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+# Install system build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Final Runtime Stage
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+# Install git runtime (required by GitPython for repo scanning)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy installed python libraries from builder
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
+
+# Copy Capi codebase
+COPY . .
+
+# Create persistent storage directory for Cognee SQLite and FastEmbed cache
+RUN mkdir -p /app/.cognee_data && chmod 777 /app/.cognee_data
+ENV COGNEE_SYSTEM_DIR=/app/.cognee_data
+
+EXPOSE 8001
+
+# Healthcheck to verify API status
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:8001/health || exit 1
+
+# Start Uvicorn server
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8001"]

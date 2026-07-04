@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Rocket } from "lucide-react";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -11,6 +11,7 @@ export function Navbar() {
   const navLinks = [
     { name: "INVESTIGATE", href: "/" },
     { name: "WORKFLOW ONBOARDING", href: "/onboarding", highlight: true },
+    { name: "DEPLOYMENT GUIDE", href: "/deploy", deployBadge: true },
     { name: "EVIDENCE BOARD", href: "/graph" },
     { name: "SAFETY CHECK", href: "/check" },
     { name: "ACTIVE CASES", href: "/cases" },
@@ -27,7 +28,7 @@ export function Navbar() {
         </span>
       </Link>
 
-      <nav className="flex items-center gap-6 md:gap-8 overflow-x-auto">
+      <nav className="flex items-center gap-5 md:gap-7 overflow-x-auto">
         {navLinks.map((link) => {
           const isActive = pathname === link.href;
           return (
@@ -37,12 +38,15 @@ export function Navbar() {
               className={`text-xs uppercase font-sans tracking-widest transition-all duration-200 relative py-1 flex items-center gap-1.5 whitespace-nowrap ${
                 isActive
                   ? "text-[#f5a623] font-semibold"
+                  : link.deployBadge
+                  ? "text-[#22c55e] hover:text-[#f5a623] font-medium"
                   : link.highlight
                   ? "text-[#fbbf24] hover:text-[#f5a623] font-medium"
                   : "text-[#9ca3af] hover:text-[#f5a623]"
               }`}
             >
               {link.highlight && <Sparkles className="w-3.5 h-3.5 text-[#f5a623] animate-pulse" />}
+              {link.deployBadge && <Rocket className="w-3.5 h-3.5 text-[#22c55e] animate-bounce" />}
               {link.name}
               <span
                 className={`absolute bottom-0 left-0 w-full h-[2px] bg-[#f5a623] transition-transform duration-200 ${
