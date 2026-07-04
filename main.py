@@ -9,12 +9,21 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Enable CORS for frontend dashboard (Next.js local dev on port 3000 / any origin)
+# Secure CORS Configuration (Prevents OWASP CORS wildcard credential exposure)
+import os
+allowed_origins_env = os.getenv("ALLOWED_ORIGINS", "*")
+if allowed_origins_env == "*":
+    origins = ["*"]
+    allow_creds = False
+else:
+    origins = [o.strip() for o in allowed_origins_env.split(",") if o.strip()]
+    allow_creds = True
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
+    allow_origins=origins,
+    allow_credentials=allow_creds,
+    allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
 )
 

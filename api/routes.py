@@ -3,25 +3,25 @@ import sqlite3
 import asyncio
 from typing import Dict, Any, List, Optional
 from fastapi import APIRouter, HTTPException, Query
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
-from core.memory import recall_config, record_incident, record_safe_change, get_data_dir, init_cognee
+from core.memory import recall_config, record_incident, record_safe_change, get_data_dir, init_cognee, calculate_danger_score
 
 router = APIRouter()
 
 class QueryRequest(BaseModel):
-    key: str
-    service: str = "payments-api"
+    key: str = Field(..., max_length=100, pattern=r"^[a-zA-Z0-9_\-\.]+$", description="Configuration key name")
+    service: str = Field("payments-api", max_length=100, pattern=r"^[a-zA-Z0-9_\-\.]+$", description="Service name")
 
 class IncidentRequest(BaseModel):
-    key: str
-    service: str = "payments-api"
-    notes: str
-    severity: str = "P2"
+    key: str = Field(..., max_length=100, pattern=r"^[a-zA-Z0-9_\-\.]+$", description="Configuration key name")
+    service: str = Field("payments-api", max_length=100, pattern=r"^[a-zA-Z0-9_\-\.]+$", description="Service name")
+    notes: str = Field(..., max_length=2000, description="Description of the incident and root cause")
+    severity: str = Field("P2", pattern=r"^P[1-4]$", description="Incident severity level")
 
 class SafeRequest(BaseModel):
-    key: str
-    service: str = "payments-api"
+    key: str = Field(..., max_length=100, pattern=r"^[a-zA-Z0-9_\-\.]+$", description="Configuration key name")
+    service: str = Field("payments-api", max_length=100, pattern=r"^[a-zA-Z0-9_\-\.]+$", description="Service name")
 
 @router.get("/")
 async def health_check():
@@ -106,17 +106,22 @@ async def get_knowledge_graph(service: str = Query("payments-api", description="
         if os.path.exists(db_path):
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
-            cursor.execute("SELECT key_name, score, caused_incident, warning_msg, deprecated FROM danger_scores")
+            cursor.execute("SELECT config_key, incidents_count, safe_deploys_count, custom_warning, deprecated FROM danger_scores")
             rows = cursor.fetchall()
-            db_scores = {r[0]: {"score": r[1], "inc": r[2], "msg": r[3], "dep": r[4]} for r in rows}
             conn.close()
+            
+            db_scores = {}
+            for r in rows:
+                k = r[0]
+                stats = calculate_danger_score(k)
+                db_scores[k] = {"score": stats["score"], "level": stats["level"], "dep": bool(r[4])}
             
             for v in variables:
                 k = v["id"]
                 if k in db_scores:
                     s = db_scores[k]["score"]
                     v["score"] = s
-                    if db_scores[k]["dep"]:
+                    if db_scores[k]["dep"] or db_scores[k]["level"] == "DEPRECATED":
                         v["status"] = "DEPRECATED"
                     elif s >= 40:
                         v["status"] = "DANGER"
@@ -124,8 +129,8 @@ async def get_knowledge_graph(service: str = Query("payments-api", description="
                         v["status"] = "CAUTION"
                     else:
                         v["status"] = "SAFE"
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"⚠️ Error reading danger scores for graph: {e}")
 
     nodes.extend(variables)
     

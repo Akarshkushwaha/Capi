@@ -131,5 +131,36 @@ def deprecate_cmd(
         asyncio.run(deprecate_service(service=service))
         console.print(f"[bold green]✅ Service '{service}' datasets (config_{service} and incidents_{service}) cleared![/bold green]")
 
+@app.command("install-hook")
+def install_hook_cmd():
+    """
+    Install the Capi pre-commit guardrail hook into the current Git repository (.git/hooks/pre-commit).
+    """
+    git_dir = ".git"
+    if not os.path.exists(git_dir):
+        console.print("[bold red]❌ Error: Not inside a Git repository (.git folder not found). Run 'git init' first.[/bold red]")
+        raise typer.Exit(code=1)
+    
+    hooks_dir = os.path.join(git_dir, "hooks")
+    os.makedirs(hooks_dir, exist_ok=True)
+    hook_path = os.path.join(hooks_dir, "pre-commit")
+    
+    hook_script = """#!/usr/bin/env bash
+# Capi Pre-Commit Guardrail (Config Archaeology)
+# Checks staged .env or config changes against historical incident memory.
+if [ -f .env ]; then
+    capi check .env --service default || exit 1
+fi
+"""
+    try:
+        with open(hook_path, "w", encoding="utf-8") as f:
+            f.write(hook_script)
+        os.chmod(hook_path, 0o755)  # Strict executable permission for owner/group/others
+        console.print(f"[bold green]✅ Successfully installed Capi guardrail hook to {hook_path}[/bold green]")
+        console.print("[dim]The guardrail will now automatically audit your .env changes on git commit.[/dim]")
+    except Exception as e:
+        console.print(f"[bold red]❌ Failed to write pre-commit hook: {e}[/bold red]")
+        raise typer.Exit(code=1)
+
 if __name__ == "__main__":
     app()
