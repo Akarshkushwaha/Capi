@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Sparkles, Terminal, Copy, Check, ShieldAlert, CheckCircle2, ArrowRight, Database, GitBranch, GitPullRequest, Zap, Play, Package, Cpu, Cloud } from "lucide-react";
+import { Sparkles, Terminal, Copy, Check, ShieldAlert, CheckCircle2, ArrowRight, Database, GitBranch, GitPullRequest, Zap, Play, Package, Cpu, Cloud, MessageSquare } from "lucide-react";
 import Link from "next/link";
 
 export default function OnboardingPage() {
@@ -379,6 +379,37 @@ export default function OnboardingPage() {
             <div className="bg-[#0a0a0a] p-3 rounded font-mono text-xs text-[#ef4444] border border-[#dc2626]/30">
               $ capi incident DB_POOL_SIZE --service payments-api --severity P1
               <div className="text-[#9ca3af] pt-1"># Result: Danger score penalized (+20) in Cognee memory.</div>
+            </div>
+          </div>
+
+          {/* Slack Integration Box */}
+          <div className="md:col-span-2 bg-[#00f0ff]/10 border border-[#00f0ff]/40 rounded-lg p-5 space-y-3 mt-2">
+            <div className="font-bebas text-2xl text-[#00f0ff] flex items-center gap-2">
+              <MessageSquare className="w-5 h-5" />
+              2-WAY SLACK & WEBHOOK INTEGRATION (NO PROPRIETARY APP REQUIRED)
+            </div>
+            <p className="font-sans text-sm text-[#f5f5f0]/90 leading-relaxed">
+              Because Capi is built on open REST standards, you don&apos;t need a heavy Slack app installed. Any Slack slash command, incident bot (PagerDuty / Rootly / Jira), or CI/CD script can connect via standard HTTP webhooks:
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+              <div className="bg-[#0a0a0a] p-3 rounded font-mono text-xs border border-[#00f0ff]/20 space-y-1">
+                <div className="text-[#00f0ff] font-bold">1. Inbound: Slack Bot → Capi (/incident)</div>
+                <div className="text-[#9ca3af] text-[11px]">When an outage is reported in Slack #incidents, trigger Capi&apos;s negative feedback loop:</div>
+                <div className="text-[#e0e0e0] pt-1 overflow-x-auto">
+                  $ curl -X POST https://capi-backend.onrender.com/incident \
+                  <br />&nbsp;&nbsp;-H &quot;Content-Type: application/json&quot; \
+                  <br />&nbsp;&nbsp;-d &apos;&#123;&quot;key&quot;:&quot;DB_POOL_SIZE&quot;,&quot;service&quot;:&quot;payments-api&quot;,&quot;notes&quot;:&quot;Reported via Slack&quot;,&quot;severity&quot;:&quot;P1&quot;&#125;&apos;
+                </div>
+              </div>
+              <div className="bg-[#0a0a0a] p-3 rounded font-mono text-xs border border-[#00f0ff]/20 space-y-1">
+                <div className="text-[#22c55e] font-bold">2. Outbound: CI/CD Guardrail → Slack (#deployments)</div>
+                <div className="text-[#9ca3af] text-[11px]">When Capi blocks a dangerous PR, send an alert to your Slack channel:</div>
+                <div className="text-[#e0e0e0] pt-1 overflow-x-auto">
+                  $ curl -X POST -H &quot;Content-type: application/json&quot; \
+                  <br />&nbsp;&nbsp;--data &apos;&#123;&quot;text&quot;:&quot;🚨 [Capi Guardrail Blocked PR]: DB_POOL_SIZE (20) breaches safe boundary (5 ≤ value ≤ 15). Caused Outage INC-47.&quot;&#125;&apos; \
+                  <br />&nbsp;&nbsp;$SLACK_WEBHOOK_URL
+                </div>
+              </div>
             </div>
           </div>
         </div>
