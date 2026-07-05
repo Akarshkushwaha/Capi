@@ -1,50 +1,81 @@
-# 💡 Capi — Config Archaeology & Vegas Detective Investigation Board
-> **Autonomous AI Configuration Guardrails & Self-Improving Provenance Knowledge Graph**
-> Built with Cognee Neuro-Symbolic Memory Layer, Python FastAPI, Next.js 14 (App Router), Tailwind CSS, and shadcn/ui.
+# Capi — Config Archaeology & Provenance Guardrail
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Built with Cognee](https://img.shields.io/badge/Memory%20Layer-Cognee-00f0ff.svg)](https://github.com/topoteretes/cognee)
-[![Next.js 14](https://img.shields.io/badge/Frontend-Next.js%2014%20App%20Router-black.svg)](https://nextjs.org)
-[![FastAPI](https://img.shields.io/badge/Backend-FastAPI%20%2F%20Python-009688.svg)](https://fastapi.tiangolo.com)
-[![OWASP Hardened](https://img.shields.io/badge/Security-OWASP%20Hardened-emerald.svg)]()
-[![Deploy on Render](https://img.shields.io/badge/Deploy-Render%20Free%20Tier-46E3B7.svg)](https://render.com)
-[![Deploy on Vercel](https://img.shields.io/badge/Deploy-Vercel-000000.svg)](https://vercel.com)
+Capi is an autonomous configuration guardrail and self-improving memory layer for software engineering teams. Built with **Cognee**, **Python FastAPI**, and **Next.js 14**, it connects mystery environment variables (`.env`) directly to historical Git commits, pull request discussions, and past production outages.
 
 ---
 
-## 🎲 The Concept: Vegas Detective Crime Scene Investigation
-Every engineering team has configuration files full of mystery values (`DB_POOL_SIZE=10`, `REQUEST_TIMEOUT=30000`, `MAX_RETRIES=3`). Nobody knows why they exist or what breaks if they change. Engineers check `git blame` (which only shows *"fix config"* by someone who left 8 months ago), search Slack (nothing), and make a blind judgment call. They deploy—and production crashes.
+## 🛠️ The Problem We Solved
 
-**Capi solves configuration drift and mystery values forever.** Inspired by *The Hangover* movie—piecing together what happened the night before from scattered clues, receipts, and memories—Capi treats your `.env` config file as a **Vegas crime scene**. You are the detective. Every commit, PR, and incident report is a piece of evidence. Capi ingests these scattered artifacts into a **Cognee hybrid vector-relational knowledge graph**, allowing engineers to query any config key and instantly unearth its full provenance, blast radius, and safe operating boundaries!
+In almost every codebase, configuration files are filled with mystery numbers like `DB_POOL_SIZE=20`, `REQUEST_TIMEOUT=30000`, or `MAX_RETRIES=3`. 
 
----
+When a developer needs to modify a service, they often have no idea why those specific values were chosen or what might break if they are changed. Checking `git blame` usually returns a generic message like *"fix config"* written by an engineer who left the company eight months ago. Searching Slack or team docs yields nothing. 
 
-## ✨ Key Features & Architectural Innovation
-
-- **🕵️‍♂️ Vegas Detective UI & Case File Cards**: A dark, moody, amber-lit dashboard styled like a Vegas detective's office at 3am. Features interactive **Case File Cards** displaying real-time Danger Score gauges (`0-100`), safe boundary sliders (`5.0 ≤ value ≤ 15.0`), and chronological evidence logs.
-- **🚀 Zero-Cloning Frictionless Onboarding**: Developers **do not need to clone this repository** to consume Capi guardrails! Drop Capi into any project via:
-  - **1-Line Package Install** (`pip install git+https://github.com/Akarshkushwaha/Capi.git`)
-  - **Git Pre-Commit Guardrail Hook** (`capi install-hook` automatically audits staged `.env` files before commits)
-  - **GitHub Actions CI/CD Pipeline** (Automated PR comments and CI blocking when danger boundaries are breached)
-- **🧠 Neuro-Symbolic Config Archaeology**: Uses Cognee's LLM reasoning engine to walk backward through Git history (`git log -p -S`), GitHub Pull Request discussions, and post-mortem logs, constructing a multi-dimensional relational graph linking config keys directly to developers (`@jdoe`) and historical outages (`INC-47`).
-- **🌌 Interactive 2D Evidence Board (`/graph`)**: A physics force-directed graph (`react-force-graph-2d`) rendering microservice dependencies, commit diffs, pull requests, and P-Incident badges in real time with neon glow aesthetics.
-- **🔄 Self-Improving Feedback Loops (`cognee.improve`)**:
-  - **🚨 Negative Feedback (Outage Reports)**: Instantly penalizes a variable's Danger Score (`+20`) in graph memory when an outage occurs so no engineer repeats the mistake.
-  - **✅ Positive Feedback (Safe Deployments)**: Rewards clean deployments by reducing the Danger Score (`-10`), keeping risk metrics accurate over time.
-- **🛡️ Comprehensive OWASP Security Hardened**:
-  - Strict **Pydantic input validation** with regex pattern matching and length caps against NoSQL/graph injection.
-  - Secure **CORS Middleware** preventing wildcard credential exposure (`allow_credentials=False` on `*`).
-  - Parameterized SQLite query binding (`?`) with 0% SQL injection risk.
-  - Strict POSIX file permissions (`0o755`) enforced on generated Git hooks.
+Without historical context, developers are forced to guess. If they guess wrong—for example, increasing database pool connections on a server with limited RAM—the service crashes in production with an out-of-memory (OOM) error.
 
 ---
 
-## 🏗️ System Architecture & Data Flow
+## 💡 How Capi Works (The "Vegas Detective" Concept)
+
+We designed Capi around the idea of piecing together scattered clues—like detectives in *The Hangover* trying to reconstruct what happened the night before from receipts, polaroids, and memory fragments. Capi treats your `.env` configuration file as an investigation board.
+
+Using **Cognee's Neuro-Symbolic AI graph engine**, Capi ingests unstructured developer artifacts (Git commit diffs, PR comments, and post-mortem logs) into a structured entity-relationship graph. 
+
+When a developer queries a variable or runs an automated `.env` audit, Capi traverses that memory graph and returns the full story behind the number:
+* **Who set it and when** (exact Git commit provenance).
+* **Why it was changed** (reviewer notes and commit messages).
+* **Safe operating boundaries** (e.g., `5.0 ≤ value ≤ 15.0`).
+* **Historical root causes** (past outages linked to that specific key).
+
+---
+
+## 📸 Core Features & Terminal Workflow
+
+### 1. Ingesting Repository Artifacts (`capi ingest`)
+Capi scans your Git repository history and post-mortem logs, feeding commit diffs and incident summaries into Cognee's vector-relational graph database.
+
+```bash
+capi ingest git . --service payments-api
+```
+![Capi Ingest Command Output](assets/ingest_screenshot.png)
+
+---
+
+### 2. Config Provenance Query (`capi query`)
+Query any configuration variable from the command line to inspect its computed danger score, safe operating boundary range, and commit provenance.
+
+```bash
+capi query --key DB_POOL_SIZE --service payments-api
+```
+![Capi Query Command Output](assets/query_screenshot.png)
+
+---
+
+### 3. Automated `.env` Safety Audits (`capi check`)
+Audit an entire `.env` file in batch before committing code or deploying to production. Capi scans every key against historical memory and warns you if any values breach safe boundaries.
+
+```bash
+capi check .env.example --service payments-api
+```
+![Capi Check Command Output](assets/check_screenshot.png)
+
+---
+
+### 4. Self-Improving Feedback Loop (`capi incident`)
+Whenever a production outage occurs, recording an incident feeds negative feedback directly back into Cognee's memory graph. The variable's danger score increases immediately (`+20 points`), ensuring the system learns from real-world events so no engineer repeats the mistake twice.
+
+```bash
+capi incident --key DB_POOL_SIZE --notes "Connection pool exhausted on t2.micro during flash sale" --severity P1 --service payments-api
+```
+![Capi Incident Command Output](assets/incident_screenshot.png)
+
+---
+
+## 🏗️ System Architecture
 
 ```mermaid
 graph TD
-    A[Git Commits / GitHub PRs / Incident Logs / .env Files] -->|Ingestion Engine| B[Capi CLI Hub / FastAPI Layer]
-    B -->|cognee.add & cognee.cognify| C[Cognee Neuro-Symbolic Graph & Vector Memory]
+    A[Git History / PRs / Incident Logs / .env Files] -->|Ingestion Engine| B[Capi CLI Hub / FastAPI Layer]
+    B -->|cognee.add & cognee.cognify| C[Cognee Hybrid Graph & Vector Memory]
     C <-->|cognee.improve| D[Self-Improving Negative/Positive Feedback Loop]
     E[Next.js 14 Vegas Detective Dashboard] <-->|REST JSON / Port 8001| F[FastAPI Backend Server]
     F <-->|Graph & Provenance Retrieval| C
@@ -55,32 +86,31 @@ graph TD
 
 ---
 
-## 🚀 Zero-Cloning Installation & Usage
+## 🚀 How to Install & Use Capi (Zero-Cloning Workflow)
 
-You don't need to clone Capi to use its guardrails in your own project! Choose the installation method that fits your workflow:
+You do not need to clone this repository to use Capi guardrails in your own engineering projects. Choose the integration method that fits your workflow:
 
-### Method 1: Instant CLI Installation (Recommended)
-Install Capi directly via Python package manager:
+### Method 1: Instant Python Package Install
+Install the Capi CLI directly via pip:
 ```bash
 pip install git+https://github.com/Akarshkushwaha/Capi.git
-# Or run using local wrapper:
-./capi --help
+capi --help
 ```
 
-### Method 2: Git Pre-Commit Guardrail Hook
-Install an automated guardrail into any local Git repository. Every time you run `git commit`, Capi will automatically audit your `.env` changes against historical outage memory:
+### Method 2: Automated Git Pre-Commit Guardrail
+Install an automated guardrail into any local Git repository. Every time you run `git commit`, Capi automatically audits your staged `.env` changes against historical outage memory:
 ```bash
-# Inside your project repo:
+# Inside your target git repository:
 capi install-hook
 
-# When you commit staged .env changes, Capi runs:
-# 🛡️ Capi Automated Config Safety Audit -> Blocks commit if DANGER score > 40!
+# When you try to commit staged .env changes, Capi runs an automated safety check.
+# If any variable has a DANGER score > 40 or violates safe boundaries, the commit is blocked!
 ```
 
 ### Method 3: GitHub Actions CI/CD Pipeline
-Add automated PR guardrails to your repository by creating `.github/workflows/capi-guardrail.yml`:
+Add automated pull request guardrails to your repository by creating `.github/workflows/capi-guardrail.yml`:
 ```yaml
-name: 🛡️ Capi Config Archaeology Guardrail
+name: Capi Config Guardrail
 on: [pull_request]
 jobs:
   audit-config:
@@ -95,61 +125,39 @@ jobs:
 
 ---
 
-## 🛠️ Complete CLI Command Reference
+## 🧠 How We Used Cognee Under the Hood
 
-Capi provides a rich, interactive terminal suite built with Typer and Rich formatting:
+We integrated Cognee as the core AI reasoning engine and memory graph of Capi across four workflows:
 
-| Command | Example Usage | Description |
-| :--- | :--- | :--- |
-| **`capi query`** | `capi query --key DB_POOL_SIZE -s payments-api` | **The Money Shot**: Scans graph memory and outputs a Vegas Case File card with risk scores, safe boundaries, and commit provenance. |
-| **`capi check`** | `capi check .env.example -s payments-api` | Audits an entire `.env` file in batch and outputs an ASCII safety audit table (`SAFE`, `CAUTION`, `DANGER`). |
-| **`capi ingest`** | `capi ingest git . -s payments-api` | Ingests Git commit history (`git`), GitHub Pull Requests (`prs`), or post-mortem logs (`incidents`) into Cognee vector graph memory. |
-| **`capi incident`** | `capi incident -k DB_POOL_SIZE -n "OOM crash" -sev P1` | Records a production outage and triggers `cognee.improve()` **negative feedback loop** (`+20` Danger Score). |
-| **`capi safe`** | `capi safe -k DB_POOL_SIZE -s payments-api` | Records a clean deployment and triggers `cognee.improve()` **positive feedback loop** (`-10` Danger Score). |
-| **`capi install-hook`** | `capi install-hook` | Installs executable `.git/hooks/pre-commit` guardrail script with strict `0o755` permissions. |
-| **`capi deprecate`** | `capi deprecate -s payments-api` | Clears and resets Cognee memory datasets for a target microservice. |
-
----
-
-## ☁️ One-Click Cloud Deployment (Render & Vercel)
-
-Capi is fully containerized with multi-stage Dockerfiles and optimized for **100% Free Tier Cloud Deployment**:
-
-### 1. Backend Server (Render.com)
-The FastAPI backend is configured via `render.yaml` and `Dockerfile.backend` for Render Free Tier:
-1. In Render Dashboard, click **New > Blueprint** and select your repository.
-2. Render automatically builds `Dockerfile.backend` and launches the web service on `https://capi-backend.onrender.com`.
-3. *(Note: Configured without disk volume requirements for seamless Free Tier compatibility).*
-
-### 2. Frontend Dashboard (Vercel)
-The Next.js 14 dashboard is configured via `dashboard/vercel.json` and `dashboard/Dockerfile`:
-1. In Vercel, click **Add New Project** and select your GitHub repository.
-2. Set **Root Directory** to `dashboard`.
-3. Add Environment Variable:
-   - `NEXT_PUBLIC_API_URL` = `https://your-render-backend.onrender.com`
-4. Click **Deploy**! Your Vegas Detective Suite will be globally live in under 60 seconds!
+1. **Graph Construction (`cognee.add` & `cognee.cognify`):** In `core/ingestion.py`, Capi feeds raw commit diffs (`git log -p -S`), PR comments, and incident post-mortems into `cognee.add()`. We then call `await cognee.cognify()` to extract entities and build relationships connecting variables to developers (`@jdoe`) and historical outages (`INC-47`).
+2. **Provenance Retrieval (`cognee.search`):** During CLI audits (`capi check` or `capi query`), our backend invokes `await cognee.search(SearchType.GRAPH_COMPLETION, query=...)` to traverse the Cognee graph, retrieving reviewer reasoning and outage notes to dynamically compute a 0–100 Danger Score.
+3. **Continuous Learning (`cognee.improve`):** When `/incident` is called, Capi records a negative feedback event that increases the target variable's danger score by +20 points in memory. Clean deployments recorded via `/safe` reward the variable (-10 points).
+4. **Dual-Mode Storage (`COGNEE_MODE`):**
+   * **Local Open-Source Mode (`COGNEE_MODE=local`):** Uses local FastEmbed embeddings and SQLite vector/relational storage (`.cognee_data/databases`) for zero-cost, offline-resilient terminal usage.
+   * **Cognee Cloud Mode (`COGNEE_MODE=cloud`):** Seamlessly connects to managed Cognee Cloud API endpoints by setting `COGNEE_API_KEY` for centralized team memory synchronization across CI/CD pipelines.
 
 ---
 
 ## 📡 REST API Reference Table (Port 8001)
 
-| Endpoint | Method | Description | Payload / Params |
+| Endpoint | Method | Description | Example Payload / Params |
 | :--- | :---: | :--- | :--- |
-| `/query` | `POST` | Perform config archaeology scan on a variable | `{"key": "DB_POOL_SIZE", "service": "payments-api"}` |
-| `/incident` | `POST` | Record outage & trigger negative feedback (`+20` risk) | `{"key": "...", "service": "...", "notes": "...", "severity": "P1"}` |
-| `/safe` | `POST` | Record clean deployment & trigger positive feedback (`-10` risk) | `{"key": "...", "service": "..."}` |
-| `/graph` | `GET` | Fetch nodes and links for 2D force graph explorer | `?service=payments-api` |
-| `/health` | `GET` | Check engine connection status & Cognee memory mode | None |
+| `/query` | `POST` | Perform config archaeology scan on a target variable | `{"key": "DB_POOL_SIZE", "service": "payments-api"}` |
+| `/check` | `POST` | Batch audit a map of key-value pairs from a `.env` file | `{"env_vars": {"DB_POOL_SIZE": "20"}, "service": "payments-api"}` |
+| `/incident` | `POST` | Record an outage and trigger negative feedback (`+20` risk) | `{"key": "...", "service": "...", "notes": "...", "severity": "P1"}` |
+| `/safe` | `POST` | Record a clean deployment and trigger positive feedback (`-10` risk) | `{"key": "...", "service": "..."}` |
+| `/graph` | `GET` | Fetch nodes and links for the 2D force graph explorer | `?service=payments-api` |
+| `/health` | `GET` | Check backend connection status and active Cognee memory mode | None |
 
 ---
 
-## 🌐 Cognee Cloud vs. Open Source Mode
+## ☁️ Cloud Deployment Architecture
 
-Capi natively supports both local development and enterprise cloud deployments:
-- **Local Open Source Mode (`COGNEE_MODE=local` / default)**: Uses local FastEmbed embeddings and SQLite vector/graph storage (`.cognee_data/databases`) for lightning-fast, zero-cost developer workflows and offline resilience.
-- **Cognee Cloud Mode (`COGNEE_MODE=cloud`)**: Seamlessly connects to managed Cognee Cloud graph tenants by setting `COGNEE_API_KEY` in `.env`, enabling centralized multi-team graph synchronization across distributed CI/CD pipelines.
+Capi is fully containerized and structured for simple cloud deployment:
+* **Backend Server (Render):** Configured via `render.yaml` and `Dockerfile.backend`. Deployable as a web service on Render Free Tier without persistent disk requirements.
+* **Frontend Dashboard (Vercel):** The Next.js 14 web app in `dashboard/` is configured via `vercel.json` and connects directly to the backend REST API via `NEXT_PUBLIC_API_URL`.
 
 ---
 
 ## 🏆 Built for the Cognee AI Hackathon
-Built by **Team Capi** to demonstrate how Neuro-Symbolic AI memory layers transform software engineering culture from reactive firefighting to autonomous, self-improving configuration guardrails.
+Built by **Team Capi** to demonstrate how AI graph memory layers transform engineering culture from reactive firefighting to autonomous, self-improving configuration guardrails.
