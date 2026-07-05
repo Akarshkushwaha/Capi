@@ -263,39 +263,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 2-WAY SLACK & BOT WEBHOOK SHOWCASE */}
-      <section className="pt-4">
-        <div className="bg-[#00f0ff]/10 border border-[#00f0ff]/40 rounded-2xl p-8 space-y-4 shadow-[0_0_30px_rgba(0,240,255,0.1)]">
-          <div className="font-bebas text-3xl md:text-4xl text-[#00f0ff] flex items-center gap-3">
-            <MessageSquare className="w-7 h-7" />
-            2-WAY SLACK & WEBHOOK INTEGRATION (NO PROPRIETARY APP REQUIRED)
-          </div>
-          <p className="font-sans text-base text-[#f5f5f0]/90 leading-relaxed max-w-4xl">
-            Because Capi is built on open REST JSON standards, you don&apos;t need a heavy Slack app installed. Any Slack slash command, incident bot (PagerDuty / Rootly / Jira), or CI/CD script can connect via standard HTTP webhooks:
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-            <div className="bg-[#0a0a0a] p-5 rounded-xl font-mono text-xs border border-[#00f0ff]/30 space-y-2 shadow-inner">
-              <div className="text-[#00f0ff] font-bold text-sm">1. Inbound: Slack Bot → Capi (/incident)</div>
-              <div className="text-[#9ca3af] text-xs">When an outage is reported in Slack #incidents, trigger Capi&apos;s negative feedback loop in real time:</div>
-              <div className="text-[#e0e0e0] pt-2 overflow-x-auto bg-[#111116] p-3 rounded border border-[#2a2a36]">
-                $ curl -X POST https://capi-backend.onrender.com/incident \
-                <br />&nbsp;&nbsp;-H &quot;Content-Type: application/json&quot; \
-                <br />&nbsp;&nbsp;-d &apos;&#123;&quot;key&quot;:&quot;DB_POOL_SIZE&quot;,&quot;service&quot;:&quot;payments-api&quot;,&quot;notes&quot;:&quot;Reported via Slack&quot;,&quot;severity&quot;:&quot;P1&quot;&#125;&apos;
-              </div>
-            </div>
-            <div className="bg-[#0a0a0a] p-5 rounded-xl font-mono text-xs border border-[#00f0ff]/30 space-y-2 shadow-inner">
-              <div className="text-[#22c55e] font-bold text-sm">2. Outbound: CI/CD Guardrail → Slack (#deployments)</div>
-              <div className="text-[#9ca3af] text-xs">When Capi blocks a dangerous PR, send an alert directly to your team&apos;s Slack channel:</div>
-              <div className="text-[#e0e0e0] pt-2 overflow-x-auto bg-[#111116] p-3 rounded border border-[#2a2a36]">
-                $ curl -X POST -H &quot;Content-type: application/json&quot; \
-                <br />&nbsp;&nbsp;--data &apos;&#123;&quot;text&quot;:&quot;🚨 [Capi Guardrail Blocked PR]: DB_POOL_SIZE (20) breaches safe boundary (5 ≤ value ≤ 15). Caused Outage INC-47.&quot;&#125;&apos; \
-                <br />&nbsp;&nbsp;$SLACK_WEBHOOK_URL
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* FOOTER CALL TO ACTION */}
       <section className="pt-8">
         <div className="bg-gradient-to-r from-[#14141a] via-[#1a1a24] to-[#14141a] border border-[#f5a623]/50 rounded-2xl p-10 text-center space-y-6 shadow-[0_0_50px_rgba(245,166,35,0.2)]">
