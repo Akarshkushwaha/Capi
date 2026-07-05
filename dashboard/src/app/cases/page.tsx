@@ -79,7 +79,7 @@ export default function CasesPage() {
         </div>
 
         <Link
-          href="/"
+          href="/investigate"
           className="px-6 py-2.5 bg-[#f5a623] hover:bg-[#fbbf24] text-[#0a0a0a] font-bebas text-xl tracking-wider rounded-lg transition-all shadow-[0_0_15px_rgba(245,166,35,0.3)] flex items-center gap-2"
         >
           <span>OPEN NEW INVESTIGATION</span>
@@ -143,7 +143,7 @@ export default function CasesPage() {
                 </div>
 
                 <Link
-                  href="/"
+                  href="/investigate"
                   className="px-4 py-1.5 bg-[#1a1a1a] hover:bg-[#2a2a2a] border border-[#2a2a2a] hover:border-[#f5a623] text-[#f5f5f0] font-mono text-xs rounded transition-colors flex items-center gap-1"
                 >
                   <span>INSPECT</span>

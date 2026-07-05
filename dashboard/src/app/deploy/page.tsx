@@ -315,7 +315,7 @@ export default function DeployPage() {
             <ArrowRight className="w-5 h-5" />
           </Link>
           <Link
-            href="/"
+            href="/investigate"
             className="px-8 py-3 bg-[#111111] hover:bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#f5a623] text-[#f5f5f0] font-bebas text-2xl tracking-wider rounded-lg transition-colors"
           >
             RETURN TO MISSION CONTROL

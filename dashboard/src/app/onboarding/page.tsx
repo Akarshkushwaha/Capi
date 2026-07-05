@@ -425,7 +425,7 @@ export default function OnboardingPage() {
         </p>
         <div className="flex flex-wrap justify-center gap-4 pt-2">
           <Link
-            href="/"
+            href="/investigate"
             className="px-8 py-3 bg-[#f5a623] hover:bg-[#fbbf24] text-[#0a0a0a] font-bebas text-2xl tracking-wider rounded-lg transition-transform hover:-translate-y-0.5 shadow-lg flex items-center gap-2"
           >
             <span>OPEN MISSION CONTROL</span>
