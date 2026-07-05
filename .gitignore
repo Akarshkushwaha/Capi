@@ -25,3 +25,8 @@ frontend/dist-ssr/
 
 # OS
 .DS_Store
+
+# Scratch & Local Context
+context.md
+*.scratch
+*.log
