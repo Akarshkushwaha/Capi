@@ -11,7 +11,7 @@ services:
     ports:
       - "8001:8001"
     environment:
-      - GROQ_API_KEY=${GROQ_API_KEY:-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}
+      - GROQ_API_KEY=${GROQ_API_KEY:-gsk_your_groq_api_key_here}
       - GITHUB_TOKEN=${GITHUB_TOKEN:-}
       - COGNEE_MODE=${COGNEE_MODE:-open_source}
       - COGNEE_API_URL=${COGNEE_API_URL:-}

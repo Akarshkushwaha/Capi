@@ -155,7 +155,7 @@ export default function DeployPage() {
               </div>
               <div className="space-y-1 text-[#22c55e]">
                 <p><span className="text-[#9ca3af]">$</span> git clone https://github.com/Akarshkushwaha/Capi.git && cd Capi</p>
-                <p><span className="text-[#9ca3af]">$</span> export GROQ_API_KEY="gsk_rWruvdftYXGzgH0nPmPnWGdyb3..."</p>
+                <p><span className="text-[#9ca3af]">$</span> export GROQ_API_KEY="gsk_your_groq_api_key_here"</p>
                 <p><span className="text-[#9ca3af]">$</span> docker compose up -d --build</p>
                 <p className="text-[#f5f5f0] pt-2 opacity-80">✓ Backend live at http://localhost:8001 | Dashboard live at http://localhost:3000</p>
               </div>
