@@ -9,8 +9,7 @@ export function Navbar() {
   const pathname = usePathname();
 
   const navLinks = [
-    { name: "OVERVIEW", href: "/" },
-    { name: "INVESTIGATE CONSOLE", href: "/investigate" },
+    { name: "INVESTIGATE", href: "/investigate" },
     { name: "WORKFLOW ONBOARDING", href: "/onboarding", highlight: true },
     { name: "DEPLOYMENT GUIDE", href: "/deploy", deployBadge: true },
     { name: "EVIDENCE BOARD", href: "/graph" },

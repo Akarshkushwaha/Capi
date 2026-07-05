@@ -22,16 +22,16 @@ export default function LandingPage() {
       {/* HERO SECTION */}
       <section className="text-center space-y-6 pt-8 md:pt-12 relative">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#00f0ff]/10 border border-[#00f0ff]/30 text-[#00f0ff] font-mono text-xs uppercase tracking-widest shadow-[0_0_20px_rgba(0,240,255,0.2)] animate-pulse">
-          <Trophy className="w-4 h-4" />
-          <span>HACKATHON TRACK 1 CONTENDER: BEST USE OF OPEN SOURCE COGNEE</span>
+          <Sparkles className="w-4 h-4" />
+          <span>AUTONOMOUS NEURO-SYMBOLIC CONFIGURATION GUARDRAILS</span>
         </div>
 
         <h1 className="font-bebas text-6xl md:text-[88px] text-white tracking-wide leading-[0.95] max-w-5xl mx-auto drop-shadow-lg">
-          THE 3 AM VEGAS CRIME SCENE OF <span className="text-[#f5a623] animate-neon-flicker">CONFIGURATION</span>
+          WHAT HAPPENED <span className="text-[#f5a623] animate-neon-flicker">LAST NIGHT?</span>
         </h1>
 
         <p className="font-sans text-lg md:text-2xl text-[#9ca3af] max-w-3xl mx-auto font-normal leading-relaxed">
-          Your <code className="text-[#f5a623] bg-[#1a1a1a] px-2 py-0.5 rounded font-mono text-base md:text-lg">.env</code> files are full of mystery numbers. Capi is an autonomous Neuro-Symbolic guardrail that connects environment variables directly to Git commits, pull request discussions, and past production outages.
+          Your <code className="text-[#f5a623] bg-[#1a1a1a] px-2 py-0.5 rounded font-mono text-base md:text-lg">.env</code> config values have a secret history. Capi connects mystery variables directly to Git commits, pull request discussions, and past production outages — so you never break production again.
         </p>
 
         {/* HERO CTA BUTTONS */}
@@ -125,11 +125,11 @@ export default function LandingPage() {
 
           <div className="text-center space-y-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00f0ff]/10 border border-[#00f0ff]/30 text-[#00f0ff] font-mono text-xs uppercase tracking-widest">
-              <Trophy className="w-3.5 h-3.5" />
-              <span>HACKATHON TRACK 1 CONTENDER</span>
+              <Lock className="w-3.5 h-3.5" />
+              <span>100% LOCAL PRIVACY-FIRST ARCHITECTURE</span>
             </div>
             <h2 className="font-bebas text-4xl md:text-6xl text-white tracking-wide">
-              WHY CAPI IS BUILT FOR TRACK 1: <span className="text-[#00f0ff]">BEST USE OF OPEN SOURCE COGNEE</span>
+              POWERED BY <span className="text-[#00f0ff]">OPEN SOURCE COGNEE</span>
             </h2>
             <p className="font-sans text-base md:text-lg text-[#9ca3af] max-w-4xl mx-auto leading-relaxed">
               In enterprise software engineering, environment files (<code className="text-[#f5a623] bg-[#1a1a1a] px-1.5 py-0.5 rounded font-mono">.env</code>) contain production secrets, database credentials, internal IPs, and proprietary architecture designs. Security teams and CISOs strictly forbid sending <code className="text-[#f5a623] bg-[#1a1a1a] px-1.5 py-0.5 rounded font-mono">.env</code> files or Git commit history to external cloud APIs or third-party SaaS vendors.
